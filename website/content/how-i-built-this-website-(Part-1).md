@@ -4,13 +4,15 @@ tags: flask, aws, markdown
 
 ## Introduction
 
-This post is a step-by-step tutorial for how I made this website. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like this one. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
 
-Table of Contents:
+Posts in this series:
 1. Flask (you are here)
 2. [Introduction to Markdown](/how-i-built-this-website-(Part-2\))
 3. [Configuring the Markdown blog](/how-i-built-this-website-(Part-3\))
 4. [Amazon Web Services](/how-i-built-this-website-(Part-4\))
+
+This post covers the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
 
 ## Prerequisites
 
@@ -52,11 +54,13 @@ Back in Terminal, enter the following command:
 matt@matt$ python run.py
 ```
 
-*Et viola*, by entering the URL `localhost:5000` into your favorite browser you will see your "Hello World!". The important thing to note is that Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user. For instance, in the above Python code, change `@app.route("/")` to `@app.route("/test")`. Now, accessing the URL `localhost:5000` does nothing, but accessing `localhost:5000/test` serves the "Hello World!" page.
+*Et viola*, by entering the URL `localhost:5000` into your favorite browser you will see your "Hello World!". The important thing to note is that Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user.
 
-### Configuring your Flask project
+### Configuring a Flask project
 
-Flask projects are frequently structured in the following fashion:
+Next, clone my [minimal Flask repository](https://github.com/matt-cart/minimal-website-demo) into a new folder.
+
+In the previous example, the website was entirely contained within a single Python script. This is great, but it will struggle to capture some of the complexity and sophistication we hope to implement. The demonstration repository is structed as follows:
 
 ```
 ├── run.py
@@ -65,14 +69,16 @@ Flask projects are frequently structured in the following fashion:
 ├── website/
 	└── static/
 	└── templates/
+	└── __init__.py
 	└── views.py
 ```
 
 Let's go through each piece.
 
-#### run.py
 
-The `run.py` file is ultimately what gets executed in the console to run the development server that we used for our Hello World! example. In that first iteration, we included our route (also called a "view") in the `run.py` file. As our projet gets more sophisticated, it gets cumbersome to have all of our views in the `run.py` file. We'll move those somewhere else. In the meantime, let's update our `run.py` file to contain the following code:
+#### The `run.py` file
+
+The `run.py` file is ultimately what gets executed in the console to run the development server that we used for our Hello World! example. In that first iteration, we included our main route (also called a "view") in the `run.py` file. As our projet gets more sophisticated, it gets cumbersome to have all of our views in the `run.py` file. These views are all moved to the `views.py` file. Our new `run.py` is quite simple:
 
 ```python
 from website import app
@@ -82,9 +88,17 @@ app.run('0.0.0.0', debug=True)
 
 This configuration will make more sense when we eventually configure our Apache web server to create a production-level website.
 
-#### Virtual environment and requirements.txt
+#### Virtual environment and `requirements.txt`
 
-Following convention, I create a virtual environment named `venv` using the steps in the Hello World! example. Make sure you always activate the virtual environment when you start working on this project. Every time a new module is added to our pip environment, we want to get in the habit of adding it to our `requirements.txt` file:
+Following convention, create a virtual environment named `venv` using the steps in the Hello World! example. Make sure you always activate the virtual environment when you start working on this project. 
+
+To install the necessary Python modules for this demo, use the following command:
+
+```posh 
+matt@matt$ pip install -r requirements.txt
+```
+
+Every time a new module is added to our pip environment, we want to get in the habit of adding it to our `requirements.txt` file:
 
 ```posh 
 matt@matt$ pip freeze > requirements.txt
@@ -92,39 +106,33 @@ matt@matt$ pip freeze > requirements.txt
 
 This makes it easier for you to install your Python environment when moving to a production server.
 
-#### The website directory
+#### The `website` directory
 
-This directory contains all the content of our website as well as the views that connect URL paths with the content we wish to deliver.
+This directory contains all the content of our website as well as the routing that connect URL paths with the content we wish to deliver.
 
-#### static
+#### The `static` directory
 
-The `static/` directory contains the static files including CSS files, JavaScript files and images. It is structured as follows:
+The `static/` directory contains the static files including CSS files, JavaScript, etc. For this example it will remain rather simple:
 
 ```
 ├── static/
 	└── bower.json
 	└── bower_components/
-	└── css/
-		└── style.css
-	└── downloads/
-	└── img/
-		└── favicon.ico
-		└── mugshot_website.png
 ```
 
-The `bower.json` file and `bower_components` directory are automatically created when we install packages with bower (and save the history of added packages). For this project, I am using Bootstrap v3, Bootstrap Social and Font Awesome (jQuery gets automatically installed as it is a dependency of Bootstrap). To install these packages, simply copy my `bower.json` file into your `static/` directory and enter the following command:
+The `bower.json` file and `bower_components` directory are automatically created when we install packages with bower (and save the history of added packages). Here, I am using Bootstrap v3. To install this packages and automatically create the `bower_components` directory, run the following command while in the `static` directory:
 
 ```posh 
 matt@matt$ bower install
 ```
 
-My `style.css` file contains all of the CSS I want to layer on top of Bootstrap. Eventually, we will add another CSS file that handles the syntax coloring of the code snippets you see in this post.
+In [Part 3](/how-i-built-this-website-(Part-3\)), we'll discuss adding custom CSS and images to the `static` directory.
 
-#### templates
+#### The `templates` directory
 
 This directory contains all of the HTML files that will be served. Before we get to the blogging components of this website, let's start with two files: `home_page.html` and `layout.html`. A powerful component of Flask (via the [Jinja](http://jinja.pocoo.org/) package) is the ability to create "layouts" that get passed on to each additional web page. In my case, the `layout.html` file allows me to add a universal header and navbar to each page without having to manually add that information to each and every HTML file.
 
-Here's a minimal version of my `layout.html` that demonstrates how to load a CSS file from the `bower_components` directory and how to allow the layout to be propagated to all future HTML files.
+Below is `layout.html`, which demonstrates how to load a CSS file from the `bower_components` directory and also how we allow the layout to be propagated to all future HTML files.
 
 ```html
 <!DOCTYPE html>
@@ -147,7 +155,7 @@ Take note of the Jinja syntax here. The `url_for()` function inside the double c
 
 The `{% block content %}{% endblock %}` snipped is ultimately replaced by the contents of individual HTML files being served.
 
-In a minimal version of `home_page.html` we would find the following:
+In `home_page.html` we find the following:
 
 ```html
 {% extends "layout.html" %}
@@ -160,7 +168,29 @@ In a minimal version of `home_page.html` we would find the following:
 {% endblock %}
 ```
 
-#### views.py
+#### The `__init__.py` file
+
+In our `run.py` file we have the line:
+
+```python
+from website import app
+```
+
+When Python encounters this line it looks for the module `website`, which is really the directory `website`. In order to tell Python that the directory `website` is, in fact, a module for import, we need to add an `__init__.py` file. In many projects, an `__init__.py` file can simply be left blank; it's presence is sufficient. However, in our case, we want to add few lines of important code to this file. These lines will automatically get executed when we try to import from the `website` module:
+
+```python
+import os
+from flask import Flask
+
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+app = Flask(__name__, instance_relative_config=True)
+
+from website import views
+```
+
+It is in this `__init__.py` file that we create the all important Flask object `app` that gets referenced in our `run.py` file. We could put all of this information in the `run.py` file itself, but when we ultimately want to configure this application to run on a real web server in [Part 4](/how-i-built-this-website-(Part-4)), this setup makes it easier.
+
+#### The `views.py` file
 
 The `views.py` file contains all of the routes we want to have for our website. The root page of any site is the `"/"` route:
 
@@ -170,28 +200,27 @@ def index():
     return render_template('home_page.html')
 ```
 
-The `render_templates` function automatically knows to look in the `templates` directory for the HTML file being referenced (the HTML file, in turn, automatically knows where to find the `layout.html` file).
+The `render_template` function automatically knows to look in the `templates` directory for the HTML file being referenced as an argument (the HTML file, in turn, automatically knows where to find the `layout.html` file).
 
-A key feature of routes is their ability to handle variables. Try creating a route like this:
+A key feature of routes is their ability to handle variables. Take this example:
 
 ```python
-@app.route('/<text>')
-def blog_home(text):
-	return text
+@app.route('/<name>')
+def print_name(name):
+	return render_template('name.html', name=name)
 ```
 
-Accessing the URL `localhost:5000/matt` will return a web page that says "matt". Eventually, we will use this feature to handle the serving of specific blog posts based on the URL.
+Accessing the URL `localhost:5000/matt` will return a web page that says "matt". Accessing the URL `localhost:5000/stephen` will return a web page that says "stephen". The important thing to note here is that we can pass arbitrary information to a web page based on the information in the URL. Eventually, we will use this to serve specific blog posts specified by the URL.
 
+## Conclusion
 
-## Markdown blog
+A quick recap of Part 1. In this post we covered:
+- Package management with pip and bower.
+- Setup of a minimal Flask website comprised of a single file.
+- Setup of a slightly more complicated website that is structured in a more traditional fashion.
+- Basic use of routes to pass information to webpages.
+- Basic Jinja syntax.
 
-
-## Amazon Web Services 
-
-
-## Additional Resources
-
-
-
+Proceed to [Part 2](/how-i-built-this-website-(Part-2)) for an introduction to Markdown.
 
 
