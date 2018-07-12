@@ -87,7 +87,7 @@ def get_post_metadata(html):
 def format_post(html):
 	post_obj = get_post_metadata(html)
 
-	header_html = '<h2>%s</h2><h5>%s</h5><p>Tags: ' % (post_obj.title, post_obj.date)
+	header_html = '<h1>%s</h1><h5>%s</h5><p>Tags: ' % (post_obj.title, post_obj.date)
 	for tag in post_obj.tags:
 		header_html += '<a class="btn btn-default btn-xs tag-link" href="http://mattcarter.co/blog/tag/%s"><span class="glyphicon glyphicon-tag"></span> %s</a>' % (tag, tag)
 	header_html += '</p>'
