@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container-fluid bump-past-nav">
+        <div class="row">
+            <div class="jumbotron col-md-3 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3" id="jumbotron-me">
+                <img id="mugshot" src="{{ url_for('static', filename='img/mugshot_website.png') }}">
+                <h3>About me</h3>
+                <p>
+                    I am a graduate student in the Department of Microbiology and Immunology at Stanford University. Previously, I was a Research Associate at <a class="home-page-link" href="http://cariboubio.com">Caribou Biosciences</a> in Berkeley, CA. I graduated from Cornell University in 2014 with a degree in Bioengineering.
+                </p>
+                <p>
+                    <a href="mailto:matthewmcarter2@gmail.com" target="_blank" class="btn btn-social-icon btn-envelope" id="mail-btn">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://github.com/matt-cart" target="_blank" class="btn btn-social-icon btn-github">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/pub/matthew-carter/45/867/a3" target="_blank" class="btn btn-social-icon btn-linkedin">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=bx0QF1YAAAAJ&hl=en&oi=sra" target="_blank" class="btn btn-social-icon btn-google">
+                        <i class="fas fa-graduation-cap"></i>
+                    </a>
+                </p>
+            </div>
+            <div class="col-md-6 col-md-offset-5" id="right-jumbos">
+                <div class="jumbotron jumbotron-posts" id="top-jumbo">
+                        <h3 class="tight-top">Research Interests</h3>
+                        <hr>
+                        <p>CRISPR biology; gene editing applications; microbial ecology; the human gut microbiome; host-commensal interaction; bioinformatics software and web development</p>
+                </div>
+                <div class="jumbotron jumbotron-posts">
+                    <h3 class="tight-top">Publications</h3>
+                    <hr>
+                    <div class="publication">
+                        <h5><a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=28459459">Mapping the genomic landscape of CRISPR-Cas9 cleavage.</a></h5>
+                        <p>Cameron, P.*, Fuller, C.K.*, Donohoue, P.D., Jones, B.N., Thompson, M.S., <b>Carter, M.M.</b>, Gradia, S., Vidal, B., Garner, E., Slorach, E.M., Lau, E., Banh, L.M., Lied, A.M., Edwards L.S., Settle A.H., Capurso D., Llaca, V., Deschamps, S., Cigan, M., Young, J.K., May, A.P.</p>
+                        <p><i>Nature Methods</i> 14(6) (2017): 600-606.</p>
+                    </div>
+                    <div class="publication bump-top">
+                        <h5><a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=27499295">DNA Repair Profiling Reveals Nonrandom Outcomes at Cas9-Mediated Breaks.</a></h5>
+                        <p>van Overbeek, M.*, Capurso, D.*, <b>Carter, M.M.</b>, Thompson, M.S., Frias, E., Russ, C., Reece-Hoyes, J.S., Nye, C., Gradia, S., Vidal, B., Zheng, J., Hoffman, G.R., Fuller, C.K., May, A.P.</p>
+                        <p><i>Molecular Cell</i> 63(4) (2016): 633-646.</p>
+                    </div>
+                </div>
+                <div class="jumbotron jumbotron-posts">
+                    <h3 class="tight-top">U.S. Patents</h3>
+                    <hr>
+                    <div class="publication">
+                        <h5>Issued</h5>
+                        <p>Andrew P. May, Rachel E. Haurwitz, Jennifer A. Doudna, James M. Berger, <b>Matthew M. Carter</b>, Paul Donohoue. Compositions and methods of nucleic acid-targeting nucleic acids. <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=15&f=G&l=50&d=PTXT&S1=9260752&OS=9260752&RS=9260752" target="_blank">US9260752</a>, Feb 2016; <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-bool.html&r=13&f=G&l=50&co1=AND&d=PTXT&s1=9410198&OS=9410198&RS=9410198" target="_blank">US9410198</a>, Aug 2016; <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=6&f=G&l=50&d=PTXT&S1=9725714&OS=9725714&RS=9725714" target="_blank">US9725714</a>, Aug 2017; <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=1&f=G&l=50&d=PTXT&p=1&S1=9803194&OS=9803194&RS=9803194" target="_blank">US9803194</a>, Oct 2017; <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=1&f=G&l=50&d=PTXT&p=1&S1=9809814&OS=9809814&RS=9809814" target="_blank">US9809814</a>, Nov 2017.</p>
+                        <h5>Pending</h5>
+                        <p><b>Matthew M. Carter</b>, Megan van Overbeek, Andrew P. May. Directed nucleic acid repair. <a href="http://appft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-bool.html&r=1&f=G&l=50&co1=AND&d=PG01&s1=20170058272&OS=20170058272&RS=20170058272" target="_blank">US20170058272</a>, Mar 2017.</p>
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

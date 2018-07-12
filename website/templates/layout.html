@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="Matt Carter's Personal Blog">
+        <meta name="keywords" content="Matt Carter, Matthew Carter, Flask, Markdown, blog" />
+        <meta name="robots" content="index, follow" />
+        <meta name="google-site-verification" content="sDMdRm0i9ZRzMZ27Of-8ijyGSJulASlz_5TJHvyecnI" />
+        <title>{% block title %}{% endblock %}</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') }}" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap-social/bootstrap-social.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/codehilite.css') }}" />
+        <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/favicon.ico') }}">
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-8 navbar-header">
+                        <a class="brand" href="{{ url_for('index') }}" id="name-link">
+                            <span id="first-name">Matt</span>
+                            <span id="last-name">Carter</span>
+                        </a>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="col-md-2 pull-right collapse navbar-collapse" id="right-nav">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="no-margin">
+                                <a class="navbar-link no-margin" href="/blog">
+                                    Blog
+                                </a>
+                            </li>
+                            <li class="no-margin">
+                                <a class="navbar-link" target="_blank" href="{{ url_for('static', filename='downloads/MatthewCarterResume.pdf') }}">
+                                    Resume
+                                </a>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="footer">
+            <div class="text-center">
+                <p class="no-margin">
+                    Powered by <a class="home-page-link" href="http://flask.pocoo.org/" target="_blank">Flask</a>. Copyright, 2018.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
