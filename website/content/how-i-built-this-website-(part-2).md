@@ -1,32 +1,143 @@
-title: Introduction to Markdown
+title: How I built this website (Part 2)
 date: 2018-07-11
 tags: markdown
 
 ## Introduction
 
+This series is a step-by-step tutorial for making a website like this one. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
 
-## Capabilities
+Posts in this series:
+1. [Flask](/how-i-built-this-website-(part-1\))
+2. Introduction to Markdown (you are here)
+3. [Configuring the Markdown blog](/how-i-built-this-website-(part-3\))
+4. [Amazon Web Services](/how-i-built-this-website-(part-4\))
 
-American-style dates, I know, I know. Here you can write markdown code, including *italics* and **bold**
+This post covers the basics of Markdown, a simple and readable markup language for writing on the web. Markdown is widely used in web writing platforms. The best introduction to Markdown is given by it's creator, John Gruber, at his blog [Daring Fireball](https://daringfireball.net/projects/markdown/syntax). Here is an excerpt from his post on Markdown syntax:
 
-You can have[^1]:
-* Lists
-* More Lists
+>Markdown is intended to be as easy-to-read and easy-to-write as is feasible.
+>
+>Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions. While Markdown’s syntax has been influenced by several existing text-to-HTML filters ... the single biggest source of inspiration for Markdown’s syntax is the format of plain text email.
+>
+>To this end, Markdown’s syntax is comprised entirely of punctuation characters, which punctuation characters have been carefully chosen so as to look like what they mean. E.g., asterisks around a word actually look like *emphasis*. Markdown lists look like, well, lists. Even blockquotes look like quoted passages of text, assuming you’ve ever used email.
 
-> And block quotes
 
-    And event highlighted code if you indent :)
+Simply put, Markdown is intended to be used as a format for writing for the web. It has a lightweight syntax that corresponds easily to HTML's system of tags. The advantage of using Markdown for this blog is that I am afforded ease of writing and reading drafts without sacrificing anything from the final look and feel.
+
+## Syntax Overview
+
+### Headers
+
+	# Header 1
+	## Header 2
+	...
+	##### Header 5
+
+# Header 1
+## Header 2
+...
+##### Header 5
+
+<br>
+
+### Emphasis
+
+	Using asterisks, one can create *italics* and **bold** fonts!
+
+Using asterisks, one can create *italics* and **bold** fonts!
+
+<br>
+
+### Lists
+
+Lists can be unordered:
+
+	I have an urge to list fruits I really like:
+	* Bananas
+	* Apples
+	* Peaches
+
+I have an urge to list fruits I really like:
+* Bananas
+* Apples
+* Peaches
+
+...or ordered:
+
+	I have an urge to rank my favorite vegetables:
+	1. Broccoli
+	2. Kale
+	3. Yams
+
+I have an urge to rank my favorite vegetables:
+1. Broccoli
+2. Kale
+3. Yams
+
+<br>
+
+### Links
+
+	This is [an example](http://mattcarter.co) of an inline link.
+
+This is [an example](http://mattcarter.co) of an inline link.
+
+	You can even give [links](http://mattcarter.co "Matt is great") titles! (Hover over me.)
+
+You can even give [links](http://mattcarter.co "Matt is great") titles! (Hover over me.)
+
+	Relative [link](/blog) paths also work...
+
+Relative [link](/blog) paths also work...
+
+	...as do reference [ID][introduction] links.
+
+...as do reference [ID](#introduction) links.
+
+<br>
+
+### Footnotes
+
+	Sometimes you are explaining something[^1]
+
+Sometimes you are explaining something...[^1]
+
+<br>
+
+### Block quotes
+
+	> The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries...
+
+>The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries...
+
+<br>
+
+### Syntax-highlited code blocks
+
+	```python
+	print "Hello, I am written in Python."
+
+	def make_blog_for_me(now):
+		return "If only it were that simple."
+	```
 
 ```python
-print "Hi"
-def poop(fer)
-try:
-	return False
+print "Hello, I am written in Python."
+
+def make_blog_for_me(now):
+	return "If only it were that simple."
 ```
 
+	You can also reference `code` in-line.
+
+You can also reference `code` in-line.
+
+<br>
+
+### Conclusion
+In this post we learned the basics of reading and writing in the Markdown markup language. The raw Markdown text of posts for this blog, including this post, can be found [here](https://github.com/matt-cart/website/tree/master/website/content).
 
 
-[^1]: This is the text of the note. 
+Proceed to [Part 3](/blog/how-i-built-this-website-(part-3)) for a walkthrough of setting up a Flask-driven Markdown blog.
 
 
-## Resources
+[^1]: That requires a little more explanation down here. 

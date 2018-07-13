@@ -8,9 +8,9 @@ This series is a step-by-step tutorial for making a website like this one. It in
 
 Posts in this series:
 1. Flask (you are here)
-2. [Introduction to Markdown](/how-i-built-this-website-(Part-2\))
-3. [Configuring the Markdown blog](/how-i-built-this-website-(Part-3\))
-4. [Amazon Web Services](/how-i-built-this-website-(Part-4\))
+2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
+3. [Configuring the Markdown blog](/blog/how-i-built-this-website-(part-3\))
+4. [Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
 
 This post covers the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
 
@@ -126,7 +126,7 @@ The `bower.json` file and `bower_components` directory are automatically created
 matt@matt$ bower install
 ```
 
-In [Part 3](/how-i-built-this-website-(Part-3\)), we'll discuss adding custom CSS and images to the `static` directory.
+In [Part 3](/blog/how-i-built-this-website-(part-3\)), we'll discuss adding custom CSS and images to the `static` directory.
 
 #### The `templates` directory
 
@@ -188,7 +188,7 @@ app = Flask(__name__, instance_relative_config=True)
 from website import views
 ```
 
-It is in this `__init__.py` file that we create the all important Flask object `app` that gets referenced in our `run.py` file. We could put all of this information in the `run.py` file itself, but when we ultimately want to configure this application to run on a real web server in [Part 4](/how-i-built-this-website-(Part-4)), this setup makes it easier.
+It is in this `__init__.py` file that we create the all important Flask object `app` that gets referenced in our `run.py` file. We could put all of this information in the `run.py` file itself, but when we ultimately want to configure this application to run on a real web server in [Part 4](/blog/how-i-built-this-website-(part-4)), this setup makes it easier.
 
 #### The `views.py` file
 
@@ -221,6 +221,6 @@ A quick recap of Part 1. In this post we covered:
 - Basic use of routes to pass information to webpages.
 - Basic Jinja syntax.
 
-Proceed to [Part 2](/how-i-built-this-website-(Part-2)) for an introduction to Markdown.
+Proceed to [Part 2](/blog/how-i-built-this-website-(part-2)) for an introduction to Markdown.
 
 
