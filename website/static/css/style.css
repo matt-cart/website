@@ -1,19 +1,26 @@
-/* --------  Layout  ----------- */
+/* ------- Global adjustments ------- */
 html, body, .container {height:100%;}
 
-body {
-    padding-top:50px;
+body {padding-top:50px;}
+
+p {font-size:1.2em;}
+
+blockquote {font-size:0.85em;}
+
+ol, ul {font-size:1.1em;}
+
+h1, h2, h3, h4, h5, h6 {
+    color:#043133;
 }
 
-#content {
-    background-color:rgba(233, 239, 235, 0.3);
-    min-height:100%;
+code, pre {
+    font-family: 'Monaco', monospace;
 }
 
-#footer {
-    background-color:rgba(233, 239, 235);
-    border-top: 1px solid #ccc;
-    margin-bottom:0px;
+pre {font-size:0.86em;}
+
+h1, h2, h3, h4, h5, h6, p, a{
+    font-family: 'Hind', sans-serif;
 }
 
 a:hover,
@@ -23,56 +30,81 @@ a:active {
     text-decoration: none;
 }
 
+a {color:#119DA4;}
 
-/* --------  Navbar  -----------  */
+a:hover {color:#043133;}
+
+
+
+/* --------  Navbar and Footer  -----------  */
 .navbar-header {margin-top:5px; padding-left:0px;}
 
 .navbar-default .navbar-nav > li > a {
     font-size:1.3em;
-    color:#939393;
+    color:#119DA4;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    background-color:#f1f1f1;
-    color:#939393;
+    background-color:#e1e1e1;
+    color:#043133;
 }
-
-.navbar-default {
-    background-color: rgba(250, 250, 250);
-    border-color: rgba(250, 250, 250);
-}
-
-#first-name {color:#939393; font-size:2.2em;}
-
-#last-name {color:#7e7e7e; font-size:2.2em;}
 
 #name-link:hover {text-decoration: none;}
 
 #right-nav {
-    margin-right:8.333%;
-    padding-right:30px;
+    margin-right:25.333%;
+    padding-right:12px;
 }
+
+/*#first-name {color:#939393; font-size:2.2em;}*/
+#first-name {color:#78D5D7; font-size:2.2em;}
+
+/*#last-name {color:#7e7e7e; font-size:2.2em;}*/
+#last-name {color:#119DA4; font-size:2.2em;}
+
+#footer {
+    background-color:#FAFAFA;
+    border-top: 1px solid #ccc;
+    margin-bottom:0px;
+}
+
+.navbar-default {
+    background-color: #fafafa;
+    border-color: #fafafa;
+}
+
+
+
+/* -------- Blog Home Page ------------- */
+#all-posts {
+    position:relative;
+    float:left;
+    height:100%;
+}
+
+#tag-section {
+    position:fixed;
+    float:right;
+    height:100%;
+    right:8.3333%;
+    margin-right:0px;
+}
+
 
 
 /* --------  Home Page  -----------  */
-.home-page-link:hover,
-.home-page-link:visited,
-.home-page-link:active {
-    color:#000;
-}
-
-.home-page-link {color:#7e7e7e;}
-
-#jumbotron-me {margin-top:120px; padding:20px; position:fixed; float:left;}
+#jumbotron-me {
+    margin-top:120px;
+    padding:20px;
+    position:fixed;
+    float:left;}
 
 #right-jumbos {position:relative;}
 
-.jumbotron {background: #fff;}
-
-.jumbotron > p {font-size:1em;}
-
-.jumbotron-posts {padding:20px !important; margin-top:0px !important;}
+.jumbotron-posts {padding:20px !important;
+    margin-top:0px !important;
+}
 
 #mugshot {max-width: 50%; margin-left:25%}
 
@@ -110,6 +142,7 @@ a:active {
 }
 
 
+
 /* --------  Custom styling  -----------  */
 
 .color-grey {color:#777;}
@@ -122,13 +155,7 @@ a:active {
 
 .blog-post {margin-bottom:20px; margin-top:90px}
 
-.codehilitetable {
-    width:100%;
-}
-
-pre {
-    font-size:0.86em;
-}
+.codehilitetable {width:100%;}
 
 div.linenodiv > pre {
     padding-right:5px;
@@ -136,14 +163,17 @@ div.linenodiv > pre {
     text-align: right;
 }
 
-.tag-button {
-    margin-right:7px;
-}
+.tag-button {margin-right:7px;}
 
-.tag-link {
-    margin-left:5px;
-}
+.tag-link {margin-left:5px;}
 
-.post-content {
-    background-color:#fff;
+.post-content {background-color:#fefefe;}
+
+.jumbotron {background: #ffffff;}
+
+.jumbotron > p {font-size:1em;}
+
+#content {
+    background-color:#fafafa;
+    min-height:100%;
 }
