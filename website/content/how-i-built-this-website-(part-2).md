@@ -1,6 +1,7 @@
 title: How I built this website (Part 2)
 date: 2018-07-11
-tags: markdown
+tags: web development, markdown
+summary: In this post we cover the basics of Markdown, a simple and readable markup language for writing on the web.
 
 ## Introduction
 
@@ -12,7 +13,7 @@ Posts in this series:
 3. [Configuring the Markdown blog](/how-i-built-this-website-(part-3\))
 4. [Amazon Web Services](/how-i-built-this-website-(part-4\))
 
-This post covers the basics of Markdown, a simple and readable markup language for writing on the web. Markdown is widely used in web writing platforms. The best introduction to Markdown is given by it's creator, John Gruber, at his blog [Daring Fireball](https://daringfireball.net/projects/markdown/syntax). Here is an excerpt from his post on Markdown syntax:
+In this post we cover the basics of Markdown, a simple and readable markup language for writing on the web. Markdown is widely used in web writing platforms. The best introduction to Markdown is given by it's creator, John Gruber, at his blog [Daring Fireball](https://daringfireball.net/projects/markdown/syntax). Here is an excerpt from his post on Markdown syntax:
 
 >Markdown is intended to be as easy-to-read and easy-to-write as is feasible.
 >

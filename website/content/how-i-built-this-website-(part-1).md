@@ -1,6 +1,7 @@
 title: How I built this website (Part 1)
 date: 2018-07-11
-tags: flask, aws, markdown
+tags: web development, flask, aws, markdown
+summary: In this this post we cover the creation of a minimal Flask-driven website.
 
 ## Introduction
 
@@ -12,7 +13,7 @@ Posts in this series:
 3. [Configuring the Markdown blog](/blog/how-i-built-this-website-(part-3\))
 4. [Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
 
-This post covers the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
+In this this post we cover the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
 
 ## Prerequisites
 
