@@ -14,6 +14,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "font-awesome": "5.1.0",
-    "bootstrap-social": "^5.0.0"
+    "bootstrap-social": "^5.0.0",
+    "academicons": "^1.8.6"
   }
 }
