@@ -58,5 +58,11 @@
             </div>
         </div>
     </body>
-    <script>window.addEventListener("hashchange", function() { scrollBy(0, -50) })</script>
+    <script>
+        window.addEventListener("hashchange", function() { 
+            if (!(window.location.hash.substr(1).startsWith('fn-'))) {
+                scrollBy(0, -50)            
+            }
+        })
+    </script>
 </html>
