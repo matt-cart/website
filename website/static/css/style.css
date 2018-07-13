@@ -1,6 +1,10 @@
 /* --------  Layout  ----------- */
 html, body, .container {height:100%;}
 
+body {
+    padding-top:50px;
+}
+
 #content {
     background-color:rgba(233, 239, 235, 0.3);
     min-height:100%;
@@ -59,8 +63,6 @@ a:active {
 }
 
 .home-page-link {color:#7e7e7e;}
-
-.bump-past-nav {margin-top:40px; padding-top:30px;}
 
 #jumbotron-me {margin-top:120px; padding:20px; position:fixed; float:left;}
 
@@ -140,4 +142,8 @@ div.linenodiv > pre {
 
 .tag-link {
     margin-left:5px;
+}
+
+.post-content {
+    background-color:#fff;
 }
