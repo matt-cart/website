@@ -5,13 +5,13 @@ summary: In this post we cover the basics of Markdown, a simple and readable mar
 
 ## Introduction
 
-This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting and deploying websites using Amazon Web Services.
 
 Posts in this series:
-1. [Flask](/how-i-built-this-website-(part-1\))
+1. [Introduction to Flask](/how-i-built-this-website-(part-1\))
 2. Introduction to Markdown (you are here)
-3. [Configuring the Markdown blog](/how-i-built-this-website-(part-3\))
-4. [Amazon Web Services](/how-i-built-this-website-(part-4\))
+3. [Configuring a Markdown blog](/how-i-built-this-website-(part-3\))
+4. [Deploying to Amazon Web Services](/how-i-built-this-website-(part-4\))
 
 In this post we cover the basics of Markdown, a simple and readable markup language for writing on the web. Markdown is widely used in web writing platforms. The best introduction to Markdown is given by it's creator, John Gruber, at his blog [Daring Fireball](https://daringfireball.net/projects/markdown/syntax). Here is an excerpt from his post on Markdown syntax:
 

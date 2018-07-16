@@ -5,13 +5,13 @@ summary: In this post we will configure an Amazon Web Services EC2 instance to h
 
 ## Introduction
 
-This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting and deploying websites using Amazon Web Services.
 
 Posts in this series:
-1. [Flask](/blog/how-i-built-this-website-(part-1\))
+1. [Introduction to Flask](/blog/how-i-built-this-website-(part-1\))
 2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
-3. [Configuring the Markdown blog](/blog/how-i-built-this-website-(part-4\))
-4. Amazon Web Services (you are here)
+3. [Configuring a Markdown blog](/blog/how-i-built-this-website-(part-4\))
+4. Deploying to Amazon Web Services (you are here)
 
 
 asdfsafsaf

@@ -5,13 +5,13 @@ summary: In this post we will build a more sophisticated Flask project that has 
 
 ## Introduction
 
-This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting and deploying websites using Amazon Web Services.
 
 Posts in this series:
-1. [Flask](/blog/how-i-built-this-website-(part-1\))
+1. [Introduction to Flask](/blog/how-i-built-this-website-(part-1\))
 2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
-3. Configuring the Markdown blog (you are here)
-4. [Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
+3. Configuring a Markdown blog (you are here)
+4. [Deploying to Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
 
 In this post we will build a more sophisticated Flask project that has a Markdown blog component. This post builds on Part 1 of the series. Before starting, clone [my GitHub repository](https://github.com/matt-cart/website) for this project in order to follow along (this is different than the repository we used in Part 1). As with last time, remember to install packages for both the Python virtual environment and Yarn environment prior to starting.
 

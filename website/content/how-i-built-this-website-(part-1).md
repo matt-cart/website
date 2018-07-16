@@ -5,19 +5,57 @@ summary: In this this post we cover the creation of a minimal Flask-driven websi
 
 ## Introduction
 
-This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting and deploying websites using Amazon Web Services.
 
 Posts in this series:
-1. Flask (you are here)
+1. Introduction to Flask (you are here)
 2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
-3. [Configuring the Markdown blog](/blog/how-i-built-this-website-(part-3\))
-4. [Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
+3. [Configuring a Markdown blog](/blog/how-i-built-this-website-(part-3\))
+4. [Deploying to Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
 
-In this this post we cover the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
+In this this post we cover the creation of a minimal Flask-driven website. We'll use [this GitHub repository](https://github.com/matt-cart/minimal-website-demo) for demo purposes. You're welcome to clone it and start from there or try to replicate it from scratch. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
+
+## What is a website?
+
+### A disclaimer
+
+The ease with which we can easily and reliably interact with the World Wide Web belies the sophistication of the technological apparatus that enables such interactions[^1]. When I first started learning the ropes of web development, I found the internet to be aptly described by [Clarke's Third Law](https://en.wikipedia.org/wiki/Clarke%27s_three_laws). Before starting the tutorial, I've tried to provide some useful background on the internet below. I wrote this background with naïve me in mind.
+
+With that being said, this background often includes heavily acronymical jargon and is by no means required reading for actually creating a functional website. If you wish, simply proceed to the "Assumptions and Prerequisites" section.
+
+### Now for the jargon
+
+Every functional website can be referenced by a uniform resource locator (URL). This URL serves as an address that specifies the location of the website within the broader network of the Internet. Importantly, the URL is not an inherently useful address, it is merely one that can be remembered by humans. A domain name system (DNS) server is responsible for storing the translation of URLs into a numerical internet protocol (IP) address which is then used to locate the physical computer system that stores the content you wish to access by using a specific URL. An actual URL, familiarly, looks something like this:
+
+```
+http://google.com/maps
+```
+
+But this URL is comprised of several important components that can be syntactically described as follows[^2]:
+
+```
+scheme://[authority]/[path]
+```
+
+The components are as follows:
+* `scheme`: describes the protocol to be used to access the URL. Frequently, the scheme is `http` (*h*yper*t*ext *t*ransfer *p*rotocol), `https` (*h*yper*t*ext *t*ransfer *p*rotocol over transport layer *s*ecuriry) or `ftp` (*f*ile *t*ransfer *p*rotocol).
+* `authority`: most frequently used to describe the "host", which is ultimately translated to an IP address by the aforementioned DNS server. In our case, the authority is `google.com`.
+* `path`: the path resembles a file system path. In some cases, the path component in a URL may actually map to a file system path on the server being accessed by a URL. Either way, this path is handled by the web server to determine what content should be served back to the user. When we go to <http://google.com/maps>, the `maps` path specifies to Google's servers that I want to see the Google Maps application.
+
+Any time you interaction you have with a web browser can be thought of as "client-side". Certain interactions, such as you hitting "enter" after typing "http://google.com/maps" into your address bar, can trigger events on the "server-side". For websites like this one, when someone enters the URL "http://mattcarter.co/blog" (client side), a request is sent to the server that "hosts" my web application (server side). The web server I am using (Apache, as we'll cover in Part 3), routes this request (and all others from the web) to my web application. The request says "someone is trying to access the web page for the `/blog` path". The application I have created uses a web framework (Flask, as we'll cover below) that is capable of processing this incoming request in some meaningful way and then serving something back to the user via the web server. "Processing the request in some meaningful way" can be many things -- we'll get into a few of these things. Regardless, there exists some mapping of URL paths to actions that my web application will take. 
+
+The above explanation is not complete or exact. Someone who works on the technology driving the internet might even go so far as to call this explanation "wrong". If anything, I have glossed over nuance for the sake of providing a useful mental model. As I said, such an explanation would have been useful to me when I was first developing websites. This tutorial will cover the construction of the client-side web pages that a user interacts with and also the construction of the server-side application that the user (intentionally) never sees. Understanding the gulf that exists between client-side and server-side, that is, the inner workings of domain name systems, transfer protocols and internet networks is simply not required to make a website like the one we are making in this tutorial.
+
+As a final disclaimer, I should say that his website is intentionally constructed in a very simple fashion. It is simple for the sake of straightforward pedagogy, but also for the sake of maintenance. This website exists near one end of the complexity spectrum -- something like the Google Search Engine exists at the other.
+
+* * *
+
+Let's dive in to the tutorial. This post in the series will result in us creating a website operating on a so called "development server". That is, this website will be functional but won't be visible to the outside world. In Part 4 we will make our final product visible to the entire Internet.
+
 
 ## Assumptions and Prerequisites
 
-This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS and the Unix command line.
+This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS and the Unix command line. I am also assuming that you are using a Mac or Linux operating system.
 
 Before starting, make sure you have the following software management tools installed:
 - [pip](https://docs.python.org/2.7/installing/) - A Python package manager.
@@ -30,7 +68,7 @@ Before starting, make sure you have the following software management tools inst
 
 ### Setting up Flask
 
-[Flask](http://flask.pocoo.org/) is a microframework for Python. Flask is lightweight and highly configurable. One does not need to sift through boilerplate code in order to get a project up and running. To illustrate how quick Flask is, create a new directory and install Flask using pip:
+[Flask](http://flask.pocoo.org/) is a microframework for Python. Flask is lightweight and highly configurable. One does not need to sift through heaps of boilerplate code in order to get a project up and running. To illustrate how quick Flask is, create a new directory, install Flask using pip and create a file called `run.py`:
 
 ```posh
 matt@matt$ mkdir new_project
@@ -50,6 +88,8 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     return "Hello World!"
+
+app.run('0.0.0.0')
 ```
 
 Back in Terminal, enter the following command:
@@ -58,7 +98,9 @@ Back in Terminal, enter the following command:
 matt@matt$ python run.py
 ```
 
-*Et viola*, by entering the URL `localhost:5000` into your favorite browser you will see your "Hello World!". The important thing to note is that Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user.
+After entering this command, Flask creates a "development" web server that is built into the module. This development server allows you to access a version of your website that is only available locally. This is specified by the IP address `0.0.0.0`, which equates to "the IP address of this machine". Even more specifically, this development server must be accessed by a specific "port". A port is a specific endpoint for communication with the development server. All web servers use specific ports for communication, but this is frequently masked from the user by the web server.
+
+For the purposes of our development server, though, we can access this local IP address and port by entering the following shorthand into a web browser of your choosing: `localhost:5000`. *Et viola*, you will see your "Hello World!". The important thing to note is that this URL has an implicit "path" (see background above). The path in this case is the "`/`" route. Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user.
 
 ### Configuring a Flask project
 
@@ -227,4 +269,8 @@ A quick recap of Part 1. In this post we covered:
 
 Proceed to [Part 2](/blog/how-i-built-this-website-(part-2)) for an introduction to Markdown.
 
+
+
+[^1]: A fascinating documentary about the past, present and future of the internet can be found in Werner Herzog's recent documentary [Lo and Behold: Reveries of the Connected World](https://www.youtube.com/watch?v=lYVjUT4FiOc). Watch this documentary even if only to see Herzog tell Elon Musk that he volunteers to go to Mars.
+[^2]: <https://en.wikipedia.org/wiki/URL#Syntax>
 
