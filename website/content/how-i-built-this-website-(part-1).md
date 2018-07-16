@@ -38,7 +38,7 @@ scheme://[authority]/[path]
 ```
 
 The components are as follows:
-* `scheme`: describes the protocol to be used to access the URL. Frequently, the scheme is `http` (*h*yper*t*ext *t*ransfer *p*rotocol), `https` (*h*yper*t*ext *t*ransfer *p*rotocol over transport layer *s*ecuriry) or `ftp` (*f*ile *t*ransfer *p*rotocol).
+* `scheme`: describes the protocol to be used to access the URL. Frequently, the scheme is `http` (*h*yper*t*ext *t*ransfer *p*rotocol), `https` (*h*yper*t*ext *t*ransfer *p*rotocol over transport layer *s*ecurity) or `ftp` (*f*ile *t*ransfer *p*rotocol).
 * `authority`: most frequently used to describe the "host", which is ultimately translated to an IP address by the aforementioned DNS server. In our case, the authority is `google.com`.
 * `path`: the path resembles a file system path. In some cases, the path component in a URL may actually map to a file system path on the server being accessed by a URL. Either way, this path is handled by the web server to determine what content should be served back to the user. When we go to <http://google.com/maps>, the `maps` path specifies to Google's servers that I want to see the Google Maps application.
 
