@@ -59,12 +59,19 @@
         </div>
         <div id="footer">
             <div class="text-center">
-                <p class="no-margin">
-                    Copyright, 2018.
+                <p class="no-margin" id="copyright">
                 </p>
             </div>
         </div>
     </body>
+    <script type="text/javascript">
+        // This snippet writes a copyright blurb in the footer. It 
+        // automatically gets the current year for future-proofing 
+        // purposes.
+        var date = new Date()
+        var theDiv = document.getElementById('copyright');
+        theDiv.innerHTML = '<i>Copyright &copy; ' + date.getFullYear() + ', Matt Carter.</i>';
+    </script>
     <script>
         // This snippet will auto-scroll the page up 50px every time
         // there is a hash change in the URL. This prevents the navbar
