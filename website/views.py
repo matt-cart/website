@@ -15,13 +15,14 @@ class Tag:
 
 
 class Post:
-    def __init__(self, title, date, tags, summary, content_html, href):
+    def __init__(self, title, date, tags, summary, href, content_md):
         self.title = title
         self.date = date
         self.tags = tags
         self.summary = summary
-        self.content_html = content_html
         self.href = href
+        self.content_md = content_md
+        self.content_html = md_to_html(content_md)
 
 
 @app.route('/')
@@ -38,8 +39,7 @@ def blog_home():
         if not file.endswith('.md'):
             continue
         full_path = os.path.join(content_path, file)
-        html = md_to_html(full_path)
-        post_obj = get_post_metadata(html)
+        post_obj = parse_markdown_post(full_path)
         posts.append(post_obj)
         for tag in post_obj.tags:
             if tag not in tag_dict.keys():
@@ -52,15 +52,6 @@ def blog_home():
     return render_template('blog_home.html', posts=sorted_posts,
         tag_dict=sorted_tag_dict)
 
-@app.route('/blog/<post_title>')
-def blog_post(post_title):
-    md_file = os.path.join(app.root_path, 'content', '%s.md' % post_title)
-    with open(md_file, 'rU') as f:
-        lines = f.readlines()
-    html = md_to_html(md_file)
-    post_obj = format_post(html)
-    return render_template('blog_post.html', post=post_obj)
-
 
 @app.route('/blog/tag/<queried_tag>')
 def get_tagged_posts(queried_tag):
@@ -71,8 +62,7 @@ def get_tagged_posts(queried_tag):
         if not file.endswith('.md'):
             continue
         full_path = os.path.join(content_path, file)
-        html = md_to_html(full_path)
-        post_obj = get_post_metadata(html)
+        post_obj = parse_markdown_post(full_path)
         if queried_tag in post_obj.tags:
             matching_posts.append(post_obj)
         for tag in post_obj.tags:
@@ -86,21 +76,31 @@ def get_tagged_posts(queried_tag):
         tag_dict=sorted_tag_dict, queried_tag=queried_tag)
 
 
-def md_to_html(md_path):
-    html = markdown2.markdown_path(md_path, extras=['footnotes',
-        'fenced-code-blocks', 'target-blank-links', 'cuddled-lists',
-        'header-ids'])
-    return html 
+@app.route('/blog/<post_title>')
+def blog_post(post_title):
+    md_path  = os.path.join(app.root_path, 'content', '%s.md' % post_title)
+    post = parse_markdown_post(md_path)
+    return render_template('blog_post.html', post=post)
 
 
-def format_post(html):
-    re_pat = re.compile(r'<p>title: (?P<title>[^\n]*)\sdate: (?P<date>\d{4}-\d{2}-\d{2})\stags: (?P<tags>[^\n^<]*)\ssummary: (?P<summary>[^\n^<]*)</p>')
-    match_obj = re.match(re_pat, html)
+def parse_markdown_post(md_path):
+    with open(md_path, 'rU') as f:
+        markdown = f.read()
+    re_pat = re.compile(r'title: (?P<title>[^\n]*)\sdate: (?P<date>\d{4}-\d{2}-\d{2})\s'
+                        r'tags: (?P<tags>[^\n]*)\ssummary: (?P<summary>[^\n]*)')
+    match_obj = re.match(re_pat, markdown)
     title = match_obj.group('title')
     date = match_obj.group('date')
     summary = match_obj.group('summary')
     tags = sorted([tag.strip() for tag in match_obj.group('tags').split(',')])
-    content_html = re.split(re_pat, html)[-1]
     href = os.path.join('http://mattcarter.co', 'blog', title.lower().replace(' ', '-'))
-    return Post(title, date, tags, summary, content_html, href)
+    content_md = re.split(re_pat, markdown)[-1]
+    return Post(title, date, tags, summary, href, content_md)
+
+
+def md_to_html(md_string):
+    html = markdown2.markdown(md_string, extras=['footnotes',
+        'fenced-code-blocks', 'target-blank-links', 'cuddled-lists',
+        'header-ids'])
+    return html 
 
