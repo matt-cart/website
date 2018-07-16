@@ -22,8 +22,9 @@ This tutorial assumes the reader has a basic understanding of Python (specifical
 Before starting, make sure you have the following software management tools installed:
 - [pip](https://docs.python.org/2.7/installing/) - A Python package manager.
 - [virtualenv](https://realpython.com/python-virtual-environments-a-primer/) - A tool for creating localized Python package installations.
+- [Homebrew](https://brew.sh/) - "Homebrew installs the stuff you need that Apple didn't."
 - [npm](https://www.npmjs.com/get-npm) - A JavaScript package manager.
-- [bower](https://bower.io/) - A package manager for web projects.
+- [yarn](https://yarnpkg.com/en/docs/getting-started) - A package manager for web projects.
 
 ## Flask
 
@@ -119,14 +120,14 @@ The `static/` directory contains the static files including CSS files, JavaScrip
 
 ```
 ├── static/
-	└── bower.json
-	└── bower_components/
+	└── package.json
+	└── node_modules/
 ```
 
-The `bower.json` file and `bower_components` directory are automatically created when we install packages with bower (and save the history of added packages). Here, I am using Bootstrap v3. To install this packages and automatically create the `bower_components` directory, run the following command while in the `static` directory:
+The `package.json` file and `node_modules` directory are automatically created when we install packages with Yarn. Here, I am using Bootstrap v3. To install this packages and automatically create the `node_modules` directory, run the following command while in the `static` directory:
 
 ```posh 
-matt@matt$ bower install
+matt@matt$ yarn install
 ```
 
 In [Part 3](/blog/how-i-built-this-website-(part-3\)), we'll discuss adding custom CSS and images to the `static` directory.

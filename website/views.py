@@ -48,7 +48,8 @@ def blog_home():
     sorted_tag_dict = collections.OrderedDict()
     for key in sorted(tag_dict.keys()):
         sorted_tag_dict[key] = tag_dict[key]
-    sorted_posts = sorted(posts, key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
+    sorted_posts = sorted(posts, 
+        key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
     return render_template('blog_home.html', posts=sorted_posts,
         tag_dict=sorted_tag_dict)
 
@@ -72,7 +73,9 @@ def get_tagged_posts(queried_tag):
     sorted_tag_dict = collections.OrderedDict()
     for key in sorted(tag_dict.keys()):
         sorted_tag_dict[key] = tag_dict[key]
-    return render_template('blog_home.html', posts=matching_posts,
+    sorted_posts = sorted(matching_posts,
+        key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
+    return render_template('blog_home.html', posts=sorted_posts,
         tag_dict=sorted_tag_dict, queried_tag=queried_tag)
 
 

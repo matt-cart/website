@@ -13,7 +13,7 @@ Posts in this series:
 3. Configuring the Markdown blog (you are here)
 4. [Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
 
-In this post we will build a more sophisticated Flask project that has a Markdown blog component. This post builds on Part 1 of the series. Before starting, clone [my GitHub repository](https://github.com/matt-cart/website) for this project in order to follow along (this is different than the repository we used in Part 1). As with last time, remember to install packages for both the Python virtual environment and Bower environment prior to starting.
+In this post we will build a more sophisticated Flask project that has a Markdown blog component. This post builds on Part 1 of the series. Before starting, clone [my GitHub repository](https://github.com/matt-cart/website) for this project in order to follow along (this is different than the repository we used in Part 1). As with last time, remember to install packages for both the Python virtual environment and Yarn environment prior to starting.
 
 ## Updated website structure
 
@@ -28,8 +28,9 @@ The structure of this improved Flask project is as follows:
 ├── requirements.txt
 ├── website/
 	└── static/
-		└── bower.json
-		└── bower_components/
+		└── package.json
+		└── node_modules/
+		└── extra_modules/
 		└── css/
 		└── downloads/
 		└── img/
@@ -158,7 +159,8 @@ def blog_home():
     sorted_tag_dict = collections.OrderedDict()
     for key in sorted(tag_dict.keys()):
         sorted_tag_dict[key] = tag_dict[key]
-    sorted_posts = sorted(posts, key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
+    sorted_posts = sorted(posts, 
+        key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
     return render_template('blog_home.html', posts=sorted_posts,
         tag_dict=sorted_tag_dict)
 ```
@@ -200,7 +202,59 @@ The final product looks like this:
 
 ### Tags
 
-In the absence of a search feature
+In the absence of a search feature, I wanted some low-overhead means of organizing posts into broad categories. To accomplish this, I'm using tags. As we saw above, the tags for a post exist in the post's header section. These tags then appear as links at the top of a blog post page. These tag links also appear on the blog home page that we just covered. When someone clicks one of these links they should see all of the posts that have that tag. To accomplish this, I created a view that looks like this:
+
+```python
+@app.route('/blog/tag/<queried_tag>')
+def get_tagged_posts(queried_tag):
+    tag_dict = dict()
+    matching_posts = []
+    content_path = os.path.join(app.root_path, 'content')
+    for file in os.listdir(content_path):
+        if not file.endswith('.md'):
+            continue
+        full_path = os.path.join(content_path, file)
+        post_obj = parse_markdown_post(full_path)
+        if queried_tag in post_obj.tags:
+            matching_posts.append(post_obj)
+        for tag in post_obj.tags:
+            if tag not in tag_dict.keys():
+                tag_dict[tag] = 0
+            tag_dict[tag] += 1
+    sorted_tag_dict = collections.OrderedDict()
+    for key in sorted(tag_dict.keys()):
+        sorted_tag_dict[key] = tag_dict[key]
+    sorted_posts = sorted(matching_posts,
+        key=lambda x: datetime.datetime.strptime(x.date, '%Y-%m-%d'), reverse=True)
+    return render_template('blog_home.html', posts=sorted_posts,
+        tag_dict=sorted_tag_dict, queried_tag=queried_tag)
+```
+
+Note that the `queried_tag` argument for the function `get_tagged_posts()` comes from the URL. Also note that this function is very similar to the `blog_home()` function we just covered. In fact, we are going to use the same blog home page template. The key difference is that we are only passing posts back to the front end that include the tag we are querying for. In fact, I could have only used one function for both routes and merely decorated the function twice like this:
+
+```python
+@app.route('/blog')
+@app.route('/blog/tag/<queried_tag>')
+def get_tagged_posts(queried_tag=None):
+	...
+	return render_template('blog_home.html', posts=sorted_posts,
+        tag_dict=sorted_tag_dict, queried_tag=queried_tag)
+```
+
+In this case, when the `/blog` route is accessed, the `queried_tag` argument defaults to `None` and our function implementation would be such that all posts would ultimately end up in `sorted_posts`.
+
+For either implementation, though, the template we wish to render is the `blog_home.html` template. Because this page will handle the cases of "all posts" and "only specifically tagged posts", we need to incorporate some logic on the front end using Jinja:
+
+```html
+{% if queried_tag %}
+	<h2 class="text-center">Posts with tag: "{{ queried_tag }}"</h2>
+{% else %}
+	<h2 class="text-center">All posts</h2>
+{% endif %}
+```
+
+In the case of showing "all posts", the `blog_home()` function does not pass the variable `queried_tag` to the front end and so it defaults to `None`. For either case, the format `Post` objects being used are identical, it is only the length of the list of `Post` objects that changes so the rest of the template can be used for both cases.
+
 
 ## Conclusion
 
