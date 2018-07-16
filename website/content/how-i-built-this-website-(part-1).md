@@ -1,6 +1,6 @@
 title: How I built this website (Part 1)
 date: 2018-07-11
-tags: web development, flask, aws, markdown
+tags: aws, flask, markdown, web development
 summary: In this this post we cover the creation of a minimal Flask-driven website.
 
 ## Introduction

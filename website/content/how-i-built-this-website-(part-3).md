@@ -1,6 +1,6 @@
 title: How I built this website (Part 3)
 date: 2018-07-11
-tags: web development, flask, markdown
+tags: flask, markdown, web development
 summary: In this post we will build a more sophisticated Flask project that has a Markdown blog component.
 
 ## Introduction
@@ -200,7 +200,7 @@ The final product looks like this:
 
 ### Tags
 
-
+In the absence of a search feature
 
 ## Conclusion
 

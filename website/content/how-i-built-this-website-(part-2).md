@@ -1,6 +1,6 @@
 title: How I built this website (Part 2)
 date: 2018-07-11
-tags: web development, markdown
+tags: markdown, web development
 summary: In this post we cover the basics of Markdown, a simple and readable markup language for writing on the web.
 
 ## Introduction
