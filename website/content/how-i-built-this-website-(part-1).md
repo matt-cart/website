@@ -5,7 +5,7 @@ summary: In this this post we cover the creation of a minimal Flask-driven websi
 
 ## Introduction
 
-This series is a step-by-step tutorial for making a website like this one. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
+This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting websites using Amazon Web Services.
 
 Posts in this series:
 1. Flask (you are here)
@@ -15,7 +15,9 @@ Posts in this series:
 
 In this this post we cover the creation of a minimal Flask-driven website. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
 
-## Prerequisites
+## Assumptions and Prerequisites
+
+This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS and the Unix command line.
 
 Before starting, make sure you have the following software management tools installed:
 - [pip](https://docs.python.org/2.7/installing/) - A Python package manager.
