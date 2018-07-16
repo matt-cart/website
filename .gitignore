@@ -103,5 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# bower
-bower_components/
+# Node and Yarn
+node_modules/
+yarn*
