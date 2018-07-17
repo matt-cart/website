@@ -52,10 +52,13 @@ a:hover {color:#043133;}
 
 #name-link:hover {text-decoration: none;}
 
-#right-nav {
-    margin-right:25.333%;
-    padding-right:12px;
+@media (min-width: 800px) {
+    #right-nav {
+        margin-right:25.333%;
+        padding-right:12px;
+    }
 }
+
 
 /*#first-name {color:#939393; font-size:2.2em;}*/
 #first-name {color:#78D5D7; font-size:2.2em;}
@@ -76,33 +79,35 @@ a:hover {color:#043133;}
 
 
 
-/* -------- Blog Home Page ------------- */
-#all-posts {
-    position:relative;
-    float:left;
-    height:100%;
-}
-
-#tag-section {
-    position:fixed;
-    float:right;
-    height:100%;
-    right:8.3333%;
-    margin-right:0px;
-}
-
-
-
 /* --------  Home Page  -----------  */
-#jumbotron-me {
-    margin-top:120px;
-    padding:20px;
-    position:fixed;
-    float:left;}
 
-#right-jumbos {position:relative;}
 
-.jumbotron-posts {padding:20px !important;
+@media screen and (min-width: 300px) {
+    #jumbotron-me {
+        float:none;
+    }
+
+    #right-jumbos {position:relative;}
+
+    #top-jumbo {}
+}
+
+@media screen and (min-width: 800px) {
+    #jumbotron-me {
+        margin-top:120px;
+        padding:20px;
+        position:fixed;
+        float:left;
+    }
+
+    #right-jumbos {position:relative;}
+
+    #top-jumbo {margin-top: 80px !important;}
+
+}
+
+.jumbotron-posts {
+    padding:20px !important;
     margin-top:0px !important;
 }
 
@@ -117,10 +122,6 @@ a:hover {color:#043133;}
 #mail-btn:hover {
     color:#fff;
     background-color:#aaa;
-}
-
-#top-jumbo {
-    margin-top: 80px !important;
 }
 
 .tight-top {
@@ -139,6 +140,36 @@ a:hover {color:#043133;}
 .publication > p {
     font-size:1em;
     margin-bottom:0px;
+}
+
+
+/* -------- Blog Home Page ------------- */
+#all-posts {
+    position:relative;
+    float:left;
+    height:100%;
+    z-index:999;
+}
+
+
+@media screen and (min-width: 800px) {
+    #tag-section {
+        position:fixed;
+        float:right;
+        height:100%;
+        right:8.3333%;
+        margin-right:0px;
+    }
+}
+
+
+
+/* -------- Blog Post ------------- */
+@media screen and (max-width: 600px) {
+    #blog-title {
+        margin-top:0px;
+        padding-top:30px;
+    }
 }
 
 

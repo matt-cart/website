@@ -3,7 +3,7 @@
     <div class="container-fluid bump-past-nav">
         <div class="row">
         	<div class="col-md-6 col-md-offset-3 post-content">
-        		<h1 class="text-center">{{ post.title }}</h1>
+        		<h1 class="text-center" id="blog-title">{{ post.title }}</h1>
         		<p class="text-center">Published on {{ post.date }}</p>
         		<h4 class="text-center">Tags:
         			{% for tag in post.tags %}

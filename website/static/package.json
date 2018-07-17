@@ -13,7 +13,8 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "bootstrap-social": "^5.0.0"
+    "bootstrap-social": "^5.0.0",
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.1.0"
