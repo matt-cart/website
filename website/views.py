@@ -8,13 +8,12 @@ from flask import render_template, send_from_directory
 from website import app
 
 
-class Tag:
-    def __init__(self, name, number):
-        self.name = name
-        self.number = number
-
-
 class Post:
+    """
+    An instance contains metadata about a blog post as well as the body of the
+    blog post written in Markdown. Upon instantiation, the Markdown content is
+    additionally converted into HTML.
+    """
     def __init__(self, title, date, tags, summary, href, content_md):
         self.title = title
         self.date = date
@@ -27,11 +26,19 @@ class Post:
 
 @app.route('/')
 def index():
+    """
+    Render the main landing page for http://mattcarter.co.
+    """
     return render_template('home_page.html')
 
 
 @app.route('/blog')
 def blog_home():
+    """
+    Render the blog home page. First, iterate over all Markdown files in 
+    /content directory. Then parse each post for meta data. Add tag info to the
+    dictionary of tags. Sort posts by date and tags alphabetically.
+    """
     tag_dict = dict()
     posts = []
     content_path = os.path.join(app.root_path, 'content')
@@ -56,6 +63,12 @@ def blog_home():
 
 @app.route('/blog/tag/<queried_tag>')
 def get_tagged_posts(queried_tag):
+    """
+    Render the blog home page, but with posts filtered by a particular tag.
+    First, iterate over all Markdown files in /content directory. Then parse
+    each post for meta data. Ignore posts that lack the specified tag. Add tag
+    info to the dictionary of tags. Sort posts by date and tags alphabetically.
+    """
     tag_dict = dict()
     matching_posts = []
     content_path = os.path.join(app.root_path, 'content')
@@ -81,12 +94,20 @@ def get_tagged_posts(queried_tag):
 
 @app.route('/blog/<post_title>')
 def blog_post(post_title):
+    """
+    Render the page for a blog post. Find the post in the /content directory
+    based on the incoming URL and parse the post metadata.
+    """
     md_path  = os.path.join(app.root_path, 'content', '%s.md' % post_title)
     post = parse_markdown_post(md_path)
     return render_template('blog_post.html', post=post)
 
 
 def parse_markdown_post(md_path):
+    """
+    Use a regular expression to parse the components of a Markdown post's
+    header and the post body. Return an assembled Post object,
+    """
     with open(md_path, 'rU') as f:
         markdown = f.read()
     re_pat = re.compile(r'title: (?P<title>[^\n]*)\sdate: (?P<date>\d{4}-\d{2}-\d{2})\s'
@@ -102,6 +123,9 @@ def parse_markdown_post(md_path):
 
 
 def md_to_html(md_string):
+    """
+    Convert a Markdown string to HTML.
+    """
     html = markdown2.markdown(md_string, extras=['footnotes',
         'fenced-code-blocks', 'target-blank-links', 'cuddled-lists',
         'header-ids'])
