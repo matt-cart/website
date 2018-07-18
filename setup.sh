@@ -6,13 +6,6 @@ sudo apt install python-minimal
 sudo apt-get install python-pip
 sudo apt install virtualenv
 
-# Clone repository and set up Python virtual environment
-git clone https://github.com/matt-cart/website.git
-cd website
-virtualenv venv
-. venv/bin/activate
-pip install -r requirements.txt
-
 # Install Node and Yarn, then install CSS/JS resources using Yarn
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
