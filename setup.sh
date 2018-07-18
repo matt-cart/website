@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Update OS and install Python
 sudo apt-get update
 sudo apt install python-minimal
