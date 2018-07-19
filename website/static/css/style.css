@@ -223,6 +223,7 @@ Thanks to Rich Leland for the CSS theme
 https://github.com/jwarby/jekyll-pygments-themes
 */
 
+code { background-color: #f4f4f4; color: #606060; }
 pre {background-color:#333; color:#f8f8f2;}
 .hll { background-color: #272822; }
 .c { color: #75715e } /* Comment */
