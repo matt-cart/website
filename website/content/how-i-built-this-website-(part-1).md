@@ -9,11 +9,19 @@ This series is a step-by-step tutorial for making a website like the one you're 
 
 Posts in this series:
 1. Introduction to Flask (you are here)
-2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
-3. [Configuring a Markdown blog](/blog/how-i-built-this-website-(part-3\))
-4. [Deploying to Amazon Web Services](/blog/how-i-built-this-website-(part-4\))
+2. [Introduction to Markdown](</blog/how-i-built-this-website-(part-2)>)
+3. [Configuring a Markdown blog](</blog/how-i-built-this-website-(part-3)>)
+4. [Deploying to Amazon Web Services](</blog/how-i-built-this-website-(part-4)>)
 
-In this this post we cover the creation of a minimal Flask-driven website. We'll use [this GitHub repository](https://github.com/matt-cart/minimal-website-demo) for demo purposes. You're welcome to clone it and start from there or try to replicate it from scratch. In Part 3, we'll dive in deeper discuss how to make a website that contains Markdown blog functionality.
+In this this post we'll create a simple website using the [Flask](http://flask.pocoo.org/) web microframework. The “micro” in microframework means Flask aims to keep the core simple but extensible. That said, this simplicity does it mean that Flask is lacking in functionality.
+
+<a href="http://flask.pocoo.org/" target="_blank">
+    <img class="center-image" width="45%" src="/static/img/flask_logo.png" />
+</a>
+
+We'll use [this GitHub repository](https://github.com/matt-cart/minimal-website-demo) for demo purposes. You're welcome to clone it and start from there or try to replicate it from scratch.
+
+* * *
 
 ## What is a website?
 
@@ -52,7 +60,6 @@ As a final disclaimer, I should say that his website is intentionally constructe
 
 Let's dive in to the tutorial. This post in the series will result in us creating a website operating on a so called "development server". That is, this website will be functional but won't be visible to the outside world. In Part 4 we will make our final product visible to the entire Internet.
 
-
 ## Assumptions and Prerequisites
 
 This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS and the Unix command line. I am also assuming that you are using a Mac or Linux operating system.
@@ -66,11 +73,11 @@ Before starting, make sure you have the following software management tools inst
 
 ## Flask
 
-### Setting up Flask
+### Introduction to Flask
 
 [Flask](http://flask.pocoo.org/) is a microframework for Python. Flask is lightweight and highly configurable. One does not need to sift through heaps of boilerplate code in order to get a project up and running. To illustrate how quick Flask is, create a new directory, install Flask using pip and create a file called `run.py`:
 
-```posh
+```console
 matt@matt$ mkdir new_project
 matt@matt$ cd new_project
 matt@matt$ virtualenv venv
@@ -94,13 +101,15 @@ app.run('0.0.0.0')
 
 Back in Terminal, enter the following command:
 
-```posh
+```console
 matt@matt$ python run.py
 ```
 
 After entering this command, Flask creates a "development" web server that is built into the module. This development server allows you to access a version of your website that is only available locally. This is specified by the IP address `0.0.0.0`, which equates to "the IP address of this machine". Even more specifically, this development server must be accessed by a specific "port". A port is a specific endpoint for communication with the development server. All web servers use specific ports for communication, but this is frequently masked from the user by the web server.
 
 For the purposes of our development server, though, we can access this local IP address and port by entering the following shorthand into a web browser of your choosing: `localhost:5000`. *Et viola*, you will see your "Hello World!". The important thing to note is that this URL has an implicit "path" (see background above). The path in this case is the "`/`" route. Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user.
+
+The [Flask Quickstart Guide](http://flask.pocoo.org/docs/1.0/quickstart/) is an excellent resource for more information about the basics of Flask.
 
 ### Configuring a Flask project
 
@@ -140,13 +149,13 @@ Following convention, create a virtual environment named `venv` using the steps 
 
 To install the necessary Python modules for this demo, use the following command:
 
-```posh 
+```console
 matt@matt$ pip install -r requirements.txt
 ```
 
 Every time a new module is added to our pip environment, we want to get in the habit of adding it to our `requirements.txt` file:
 
-```posh 
+```console
 matt@matt$ pip freeze > requirements.txt
 ```
 
@@ -158,7 +167,7 @@ This directory contains all the content of our website as well as the routing th
 
 #### The `static` directory
 
-The `static/` directory contains the static files including CSS files, JavaScript, etc. For this example it will remain rather simple:
+This directory contains the static files including CSS files, JavaScript, etc. For this example it will remain rather simple:
 
 ```
 ├── static/
@@ -168,23 +177,23 @@ The `static/` directory contains the static files including CSS files, JavaScrip
 
 The `package.json` file and `node_modules` directory are automatically created when we install packages with Yarn. Here, I am using Bootstrap v3. To install this packages and automatically create the `node_modules` directory, run the following command while in the `static` directory:
 
-```posh 
+```console
 matt@matt$ yarn install
 ```
 
-In [Part 3](/blog/how-i-built-this-website-(part-3\)), we'll discuss adding custom CSS and images to the `static` directory.
+In [Part 3](</blog/how-i-built-this-website-(part-3)>), we'll discuss adding custom CSS and images to the `static` directory.
 
 #### The `templates` directory
 
 This directory contains all of the HTML files that will be served. Before we get to the blogging components of this website, let's start with two files: `home_page.html` and `layout.html`. A powerful component of Flask (via the [Jinja](http://jinja.pocoo.org/) package) is the ability to create "layouts" that get passed on to each additional web page. In my case, the `layout.html` file allows me to add a universal header and navbar to each page without having to manually add that information to each and every HTML file.
 
-Below is `layout.html`, which demonstrates how to load a CSS file from the `bower_components` directory and also how we allow the layout to be propagated to all future HTML files.
+Below is `layout.html`, which demonstrates how to load a CSS file from the `node_modules` directory and also how we allow the layout to be propagated to all future HTML files.
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    	<link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') }}" />
+    	<link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.css') }}" />
     </head>
     <body>
     	<nav class="navbar navbar-default navbar-fixed-top">
@@ -234,11 +243,11 @@ app = Flask(__name__, instance_relative_config=True)
 from website import views
 ```
 
-It is in this `__init__.py` file that we create the all important Flask object `app` that gets referenced in our `run.py` file. We could put all of this information in the `run.py` file itself, but when we ultimately want to configure this application to run on a real web server in [Part 4](/blog/how-i-built-this-website-(part-4)), this setup makes it easier.
+It is in this `__init__.py` file that we create the all important Flask object `app` that gets referenced in our `run.py` file. We could put all of this information in the `run.py` file itself, but when we ultimately want to configure this application to run on a real web server in [Part 4](</blog/how-i-built-this-website-(part-4)>), this setup makes it easier.
 
 #### The `views.py` file
 
-The `views.py` file contains all of the routes we want to have for our website. The root page of any site is the `"/"` route:
+This file contains all of the routes we want to have for our website. The root page of any site is the `"/"` route:
 
 ```python
 @app.route('/')
@@ -261,13 +270,13 @@ Accessing the URL `localhost:5000/matt` will return a web page that says "matt".
 ## Conclusion
 
 A quick recap of Part 1. In this post we covered:
-- Package management with pip and bower.
+- Package management with pip and yarn.
 - Setup of a minimal Flask website comprised of a single file.
 - Setup of a slightly more complicated website that is structured in a more traditional fashion.
 - Basic use of routes to pass information to webpages.
 - Basic Jinja syntax.
 
-Proceed to [Part 2](/blog/how-i-built-this-website-(part-2)) for an introduction to Markdown.
+Proceed to [Part 2](</blog/how-i-built-this-website-(part-2)>) for an introduction to Markdown.
 
 
 

@@ -16,6 +16,10 @@ Posts in this series:
 
 In this post we'll cover the deployment of our fully functional website to Amazon Web Services (AWS). To accomplish this we will spin up a virtual server using Amazon EC2 to host our website and then use Amazon's Route 53 to direct internet traffic from our domain of choice to our hosted web server. This setup as I've devised it is very DIY. There are hosting configurations that are far more direct. That said, building things from scratch tends to be pedagogically more valuable. This setup also affords complete control over configuration, something that is sacrificed with other setups that handle the configuration for you.
 
+<img class="center-image" width="45%" src="/static/img/aws_logo.svg" />
+
+* * * 
+
 ## Before starting
 
 To follow this post, you'll need to [create an account with Amazon Web Services](https://portal.aws.amazon.com/billing/signup#/start). This is free to do. Additionally, Amazon provides many services that we are about to discuss for free[^1]. You will also need a registered domain name. Mine, for example, is "mattcarter.co". If you already own one and it is not registered with Amazon, you'll need to transfer it to Amazon's ownership. If you don't already own one, we'll the registration process below.
@@ -247,10 +251,17 @@ These changes should propagate through Amazon's backend rather quickly. Within a
 	* [EC2 best practices](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-best-practices.html)
 * [Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
 	* [Hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html)
+	* [Routing traffic to an EC2 instance](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html)
 
+### Other online resoures that helped me construct this blog
 
+"[Running a Flask app on AWS EC2](https://www.datasciencebytes.com/bytes/2015/02/24/running-a-flask-app-on-aws-ec2/)" by Frank Cleary at [Data Science Bytes](https://www.datasciencebytes.com/)
 
+"[How to make a Flask blog in one hour or less](http://charlesleifer.com/blog/how-to-make-a-flask-blog-in-one-hour-or-less/)" by Charles Leifer at [charlesleifer.com](http://charlesleifer.com/)
 
+"[Build a Simple, Static, Markdown-Powered Blog with Flask](http://www.jamesharding.ca/posts/simple-static-markdown-blog-in-flask/)" by James Harding at [jamesharding.ca](http://www.jamesharding.ca/)
+
+"[The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)" by Miguel Grinberg at [blog.miguelgrinberg.com](https://blog.miguelgrinberg.com/index)
 
 [^1]: Discuss free tier, first year, etc.
 [^2]: You could feasibly use any of these Linux distributions, I'm arbitrarily choosing Ubuntu. I haven't tested to see whether the rest of the tutorial applies if you choose a different distribution.

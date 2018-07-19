@@ -24,6 +24,10 @@ In this post we cover the basics of Markdown, a simple and readable markup langu
 
 Simply put, Markdown is intended to be used as a format for writing for the web. It has a lightweight syntax that corresponds easily to HTML's system of tags. The advantage of using Markdown for this blog is that I am afforded ease of writing and reading drafts without sacrificing anything from the final look and feel.
 
+<img class="center-image" width="25%" src="/static/img/markdown_logo.svg" />
+
+* * *
+
 ## Syntax Overview
 
 ### Headers
@@ -137,6 +141,29 @@ You can also reference `code` in-line.
 ### Inline HTML
 
 you can also....
+
+
+
+```python
+def parse_markdown_post(md_path):
+    """
+    Use a regular expression to parse the components of a Markdown post's
+    header and the post body. Return an assembled Post object,
+    """
+    with open(md_path, 'rU') as f:
+        markdown = f.read().decode('utf-8')
+    re_pat = re.compile(r'title: (?P<title>[^\n]*)\sdate: (?P<date>\d{4}-\d{2}-\d{2})\s'
+                        r'tags: (?P<tags>[^\n]*)\ssummary: (?P<summary>[^\n]*)')
+    match_obj = re.match(re_pat, markdown)
+    title = match_obj.group('title')
+    date = match_obj.group('date')
+    summary = match_obj.group('summary')
+    tags = sorted([tag.strip() for tag in match_obj.group('tags').split(',')])
+    href = os.path.join('http://mattcarter.co', 'blog', title.lower().replace(' ', '-'))
+    content_md = re.split(re_pat, markdown)[-1]
+    return Post(title, date, tags, summary, href, content_md)
+```
+
 
 
 <br>

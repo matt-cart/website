@@ -116,22 +116,40 @@ Importantly, the HTML content of the post is generated automatically upon instan
 
 ### Converting Markdown to HTML
 
-To accomplish Markdown-to-HTML conversion I am using the Python package [python-markdown2](https://github.com/trentm/python-markdown2). The function in `views.py` that leverages the markdown2 module is short:
+To accomplish Markdown-to-HTML conversion I am using the Python package [mistune](https://github.com/lepture/mistune). The function in `views.py` that leverages the markdown2 module is short:
 
 ```python
 def md_to_html(md_string):
-    html = markdown2.markdown(md_string, extras=['footnotes',
-        'fenced-code-blocks', 'target-blank-links', 'cuddled-lists',
-        'header-ids'])
+    """
+    Convert a Markdown string to HTML.
+    """
+    markdown_formatter = mistune.Markdown(renderer=HighlightRenderer())
+    html = markdown_formatter(md_string)
     return html 
 ```
 
-Of note here are markdown2's "[extras](https://github.com/trentm/python-markdown2/wiki/Extras)". These extras are extensions of the vanilla Markdown-to-HTML functionality:
-* `footnotes` - Allows the use of footnotes in Markdown.
-* `fenced-code-blocks` - Allows for language-specific syntax highlighting.
-* `target-blank-links` - Automatically adds `target="_blank"` to each `<a>` tag in HTML. This means each link opens a new browser tab by default.
-* `cuddled-lists` - Tweaks traditional Markdown syntax so that you don't need a blank line between a list header and list elements.
+Here, we are enhancing the mistune modules native Markdown rendering by adding syntax highlighting in fenced code blocks. We do this by leveraging the [Pygments](http://pygments.org/) module. The `HighlightRenderer` class is structured as follows:
 
+```python
+class HighlightRenderer(mistune.Renderer):
+    """
+    Extend renderer built into mistune module. This object unables code
+    highlighting during Markdown-to-HTML conversions.
+    """
+    def block_code(self, code, lang):
+        """
+        Get the language indicated in each fenced code block. Get the
+        appropriate Pygments lexer based on this language and parse code 
+        accordingly into HTML format. If not language is detected, use vanilla
+        <code> blocks.
+        """
+        if not lang:
+            return '\n<pre><code>%s</code></pre>\n' % \
+                mistune.escape(code)
+        lexer = get_lexer_by_name(lang, stripall=True)
+        formatter = html.HtmlFormatter()
+        return highlight(code, lexer, formatter)
+```
 
 
 ### Blog home page
