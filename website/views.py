@@ -1,8 +1,11 @@
 import os
 import re
+import mistune
 import datetime
-import markdown2
 import collections
+from pygments import highlight
+from pygments.formatters import html
+from pygments.lexers import get_lexer_by_name
 from flask import render_template, send_from_directory
 
 from website import app
@@ -22,6 +25,26 @@ class Post:
         self.href = href
         self.content_md = content_md
         self.content_html = md_to_html(content_md)
+
+
+class HighlightRenderer(mistune.Renderer):
+    """
+    Extend renderer built into mistune module. This object unables code
+    highlighting during Markdown-to-HTML conversions.
+    """
+    def block_code(self, code, lang):
+        """
+        Get the language indicated in each fenced code block. Get the
+        appropriate Pygments lexer based on this language and parse code 
+        accordingly into HTML format. If not language is detected, use vanilla
+        <code> blocks.
+        """
+        if not lang:
+            return '\n<pre><code>%s</code></pre>\n' % \
+                mistune.escape(code)
+        lexer = get_lexer_by_name(lang, stripall=True)
+        formatter = html.HtmlFormatter()
+        return highlight(code, lexer, formatter)
 
 
 @app.route('/')
@@ -109,7 +132,7 @@ def parse_markdown_post(md_path):
     header and the post body. Return an assembled Post object,
     """
     with open(md_path, 'rU') as f:
-        markdown = f.read()
+        markdown = f.read().decode('utf-8')
     re_pat = re.compile(r'title: (?P<title>[^\n]*)\sdate: (?P<date>\d{4}-\d{2}-\d{2})\s'
                         r'tags: (?P<tags>[^\n]*)\ssummary: (?P<summary>[^\n]*)')
     match_obj = re.match(re_pat, markdown)
@@ -126,8 +149,7 @@ def md_to_html(md_string):
     """
     Convert a Markdown string to HTML.
     """
-    html = markdown2.markdown(md_string, extras=['footnotes',
-        'fenced-code-blocks', 'target-blank-links', 'cuddled-lists',
-        'header-ids'])
+    markdown_formatter = mistune.Markdown(renderer=HighlightRenderer())
+    html = markdown_formatter(md_string)
     return html 
 

@@ -2,7 +2,7 @@ click==6.7
 Flask==1.0.2
 itsdangerous==0.24
 Jinja2==2.10
-markdown2==2.3.5
 MarkupSafe==1.0
+mistune==0.8.3
 Pygments==2.2.0
 Werkzeug==0.14.1
