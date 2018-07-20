@@ -284,7 +284,7 @@ A quick recap of Part 1. In this post we covered:
 - Basic use of routes to pass information to webpages.
 - Basic Jinja syntax.
 
-Proceed to [Part 2](</blog/how-i-built-this-website-(part-2)>) for an introduction to Markdown.
+Now let's proceed to [Part 2](</blog/how-i-built-this-website-(part-2)>) for an introduction to Markdown.
 
 
 * * *

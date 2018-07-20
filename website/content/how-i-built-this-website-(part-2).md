@@ -154,7 +154,7 @@ You can also write raw HTML in a Markdown file and the HTML will persist when yo
 ## Conclusion
 In this post we learned the basics of reading and writing in the Markdown markup language. The raw Markdown text of posts for this blog, including this post, can be found [here](https://github.com/matt-cart/website/tree/master/website/content).
 
-Now let's proceed to [Part 3](/blog/how-i-built-this-website-(part-3)) for a walkthrough of setting up a Flask-driven Markdown blog.
+Now let's proceed to [Part 3](</blog/how-i-built-this-website-(part-3)>) for a walkthrough of setting up a Flask-driven Markdown blog.
 
 * * *
 

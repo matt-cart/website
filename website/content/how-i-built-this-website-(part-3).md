@@ -13,12 +13,11 @@ Posts in this series:
 3. Configuring a Markdown blog (you are here)
 4. [Deploying to Amazon Web Services](</blog/how-i-built-this-website-(part-4)>)
 
-In this post we will build a more sophisticated Flask project that has a Markdown blog component. This post builds on Part 1 of the series. Before starting, clone [my GitHub repository](https://github.com/matt-cart/website) for this project in order to follow along (this is different than the repository we used in Part 1). As with last time, remember to install packages for both the Python virtual environment and Yarn environment prior to starting.
+In this post we will build a more sophisticated Flask project that has a Markdown blog component. This post builds on [Part 1](</blog/how-i-built-this-website-(part-1)>) of the series. Before starting, clone [my GitHub repository](https://github.com/matt-cart/website) for this project in order to follow along (this is different than the repository we used in Part 1). As with last time, remember to install packages for both the Python virtual environment and the Yarn web environment prior to starting.
 
 ## Updated website structure
 
-In [Part 1](/blog/how-i-built-this-website-(part-1)) we generated a minimal Flask website that had a simple landing page with two views -- one for the main page and one page with a custom route. In this part, we'll want to add a few templates for the blogging component, views for handling blog entries and also the Markdown files for blog entries. We will also expand the `static/` directory in order to handle custom CSS files, images and downloads.
-
+In [Part 1](</blog/how-i-built-this-website-(part-1)>) we generated a minimal Flask website that had a simple landing page with two views -- one for the main page and one page with a customizable route. In this part, we'll add a few views and templates for the blogging component and also the Markdown files for blog entries. We will also expand the `static/` directory in order to handle custom CSS files, images and downloads.
 
 The structure of this improved Flask project is as follows:
 
@@ -47,13 +46,13 @@ The structure of this improved Flask project is as follows:
 
 ## Markdown blogging
 
-In designing this website, I wanted the blogging component to be as lightweight as possible. I want to be able to write a post in a text editor like [Sublime Text](https://www.sublimetext.com/) and then publish it in a limited number of keystrokes. This means sacrificing fancy GUIs for writing and editing posts within the website itself. I also want my website to be "static". This means not having to rely on a database for persistence of content -- all content is derived from flat files. Static blogs are more secure (there are no concerns about database vulnerabilities) and more simple to configure.
+In designing this website, I wanted the blogging component to be as lightweight as possible. I want to be able to write a post in a text editor like [Sublime Text](https://www.sublimetext.com/) and then publish it in a limited number of keystrokes. This means sacrificing fancy GUIs for writing and editing posts in some admin panel of the website. I also want my website to be "static". This means not having to rely on a database for persistence of content -- all content is derived directly from the file system. Static blogs are more secure (there are no concerns about database vulnerabilities) and more simple to configure.
 
 The downside is that I am sacrificing add-ons like commenting systems, user accounts, etc. but I can live with that[^1]. The only add-on I'm indulging in this blog is a system for "tagging" entries with various keywords that can serve as links for returning all posts with the same tag.
 
 ### Structure of Markdown blog posts
 
-Here's an example of what the raw Markdown of a blog post will look like
+Here's an example of what the raw Markdown of a blog post will look like:
 
 	title: An example post
 	date: 7/11/18
@@ -62,11 +61,11 @@ Here's an example of what the raw Markdown of a blog post will look like
 
 	Blog post content begings here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
 
-Before we translate Markdown to HTML, we are going to parse these posts in order to pull out key content pieces, namely the title, date, summary and tags. Without doing this, everything would get rendered as normal text in `<p>` tags[^2]. We will handle the additional formatting of these special elements in the template using Jinja.
+Before we translate Markdown to HTML, we are going to parse these posts in order to pull out key content pieces, namely the title, date, summary and tags. Without doing this, everything would get rendered as normal text in `<p>` tags[^2]. We will handle the additional formatting of these special elements in the blog post template using Jinja.
 
 ### Serving blog posts
 
-For the sake of simplicity, the URL for each blog post will be identical to the title, which is in turn identical to the file name. So if the title is `An example post`, the URL for the post will be `http://mattcarter.co/blog/an-example-post` and the Markdown file will be `an-example-post.md`. All Markdown files will live in the `content/` directory.
+For the sake of simplicity, the URL for each blog post will be identical to the title, which is in turn identical to the file name. So if the title of a blog post is `An example post`, the URL for the post will be `http://mattcarter.co/blog/an-example-post` and the Markdown file will be `an-example-post.md`[^3]. All Markdown files will live in the `content/` directory.
 
 By structuring our files and routes this way, our view for blog posts looks rather simple:
 
@@ -96,7 +95,7 @@ This regular expression is pretty beefy. Here are the important pieces:
 * `(?P<tags>[^\n^<]*)` - Pulls out all of the text starting after the substring `tags: ` and until the next newline character. This matching string (the comma-separated list of tags) is stored with the key `tags`.
 * `(?P<summary>[^\n^<]*)` - Pulls out all of the text after the substring `summary: ` and until the next newline character. This matching string is stored with the key `summary`.
 
-After using the `re.match()` function, we can then access each match group with a command like `match_obj.group('title')`. I also call `re.split()` in order to split the overall Markdown string using the regex pattern seen above. The last element of the list resulting from the split is all of the Markdown content after the bits of metadata I've parsed out. All of these bits of metadata and the post content are stuffed into a custom `Post` object that I've defined in order to make organization of the metadata easier.
+After using the `re.match()` function, we can then access each individual match group with a command like `match_obj.group('title')`. I also call `re.split()` in order to split the overall Markdown string using the regex pattern seen above. The last element of the list resulting from the split is all of the true Markdown content after the bits of metadata I've parsed out. All of these bits of metadata and the post content are stuffed into a custom `Post` object that I've defined in order to make organization of the metadata easier.
 
 The `Post` object looks like this:
 
@@ -123,14 +122,19 @@ def md_to_html(md_string):
     """
     Convert a Markdown string to HTML.
     """
-    markdown_formatter = mistune.Markdown(renderer=HighlightRenderer())
+    markdown_formatter = mistune.Markdown(
+        renderer=HighlightRenderer(parse_block_html=True))
     html = markdown_formatter(md_string)
     return html 
 ```
 
-Here, we are enhancing the mistune modules native Markdown rendering by adding syntax highlighting in fenced code blocks. We do this by leveraging the [Pygments](http://pygments.org/) module. The `HighlightRenderer` class is structured as follows:
+Here, we are enhancing the mistune module's native Markdown rendering by adding syntax highlighting in fenced code blocks. We do this by leveraging the [Pygments](http://pygments.org/) module. The `HighlightRenderer` class is structured as follows:
 
 ```python
+from pygments import highlight
+from pygments.formatters import html
+from pygments.lexers import get_lexer_by_name
+
 class HighlightRenderer(mistune.Renderer):
     """
     Extend renderer built into mistune module. This object unables code
@@ -154,9 +158,9 @@ class HighlightRenderer(mistune.Renderer):
 
 ### Blog home page
 
-The landing page fot the `/blog` view will have three purposes. First, it will show an archive of all previous blog posts, showing the title, tags and summary for each post. Second, it will provide a list of all the tags used on published posts, each tag will be a link to see all posts with a given tag. Third, the blog landing page will double as the view for browsing posts with a specific tag. We'll cover this in the next section.
+The landing page for the `/blog` view will have three purposes. First, it will show an archive of all previous blog posts, showing the title, tags and summary for each post[^4]. Second, it will provide a list of all the tags used on published posts, each tag will be a link to see all posts with a given tag. Third, the blog landing page will double as the view for browsing posts with a specific tag. We'll cover this in the next section.
 
-In order to show an archive of every post, the function associated with the `/blog` view will need to loop over every Markdown post in the `/content` directory and then parse each post's header information. Along the way, we'll want to keep running totals of the number of posts associated with each tag. This is accomplished by using a dictionary. The last is to sort the tags in alphabetical order (vanilla Python dictionaries are intrinsically unordered so we're using an `OrderedDict` for this) and to sort the posts by the date they were published. Below you can find the `blog_home()` function for the `/blog` view.
+In order to show an archive of every post, the function associated with the `/blog` view will need to loop over every Markdown post in the `/content` directory and then parse each post's header information. Along the way, we'll want to keep running totals of the number of posts associated with each tag. This is accomplished by using a dictionary. We'll sort the tags in alphabetical order (built-in Python dictionaries are intrinsically unordered so we're using an `OrderedDict` from the `collections` library to allow for sorting) and sort the posts by the date they were published. Below you can find the `blog_home()` function for the `/blog` view.
 
 ```python
 @app.route('/blog')
@@ -183,7 +187,7 @@ def blog_home():
         tag_dict=sorted_tag_dict)
 ```
 
-When this information is passed to the front end, we handle the `posts` and `tag_dict` objects using Jinja. In the `blog_home.html` template we create two column divs. On the left hand side we loop over the `posts` list and create a [jumbotron](https://getbootstrap.com/docs/3.3/components/#jumbotron) element for each post[^4].
+When this information is passed to the front end, we handle the `posts` and `tag_dict` objects using Jinja. In the `blog_home.html` template we create two column divs. On the left hand side we loop over the `posts` list and create a [jumbotron](https://getbootstrap.com/docs/3.3/components/#jumbotron) element for each post[^5].
 
 ```html
 {% for post in posts %}
@@ -276,14 +280,17 @@ In the case of showing "all posts", the `blog_home()` function does not pass the
 
 ## Conclusion
 
+In this post, we built out the rest of our Markdown blog. This involved creating a few new views and templates that allowed us to see individual blog posts as well as post archives. Because we are not using a database, we devised a way to include post metadata in the Markdown files without actually having to convert this information directly to HTML. We also built a system for categorizing posts using tags.
 
+Now let's proceed to [Part 4](</blog/how-i-built-this-website-(part-4)>) where we'll deploy this finalized Flask project to Amazon Web Services.
 
 * * *
 
 ### Footnotes
 
-[^1]: For an depth look at a Flask blogging set up with user accounts, comments, etc. check out Miguel Grinberg's excellent [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world).
-[^2]: Why do it this way?...
-[^3]: I do note include the summary anywhere in the post. I plan to use the summary only on the landing page for the blog.
-[^4]: We are handling the same `Post` objects that used when creating the page for an individual post.
+[^1]: For an depth look at a Flask blogging set up with user accounts, comments, fancy GUIs, etc. check out Miguel Grinberg's excellent [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world).
+[^2]: This is a self-inflicted challenge due to my desire not to involve a database. Because there is no convenient means to store post metadata else where, it must live in the Markdown file for that post. Including a header in the post that is not directly translated to Markdown is perhaps a little kludgy, but I'm the only one who will be writing posts and I am comfortable keeping to this artificial standardized format. Perhaps most importantly, the end-user will never know the difference.
+[^3]: Again, this is a convention that I am holding myself to. 
+[^4]: I do not include the summary anywhere in the post. I plan to use the summary only on the landing page for the blog.
+[^5]: We are handling the same `Post` objects that used when creating the page for an individual post.
 
