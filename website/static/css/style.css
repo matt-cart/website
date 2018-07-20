@@ -9,6 +9,8 @@ blockquote {font-size:0.85em;}
 
 ol, ul {font-size:1.1em;}
 
+ol > li > ul > li { font-size: 0.90em; }
+
 li > p { font-size:1em; }
 
 h1, h2, h3, h4, h5, h6 {
