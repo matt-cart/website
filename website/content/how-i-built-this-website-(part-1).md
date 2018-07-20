@@ -13,27 +13,33 @@ Posts in this series:
 3. [Configuring a Markdown blog](</blog/how-i-built-this-website-(part-3)>)
 4. [Deploying to Amazon Web Services](</blog/how-i-built-this-website-(part-4)>)
 
-In this this post we'll create a simple website using the [Flask](http://flask.pocoo.org/) web microframework. The “micro” in microframework means Flask aims to keep the core simple but extensible. That said, this simplicity does it mean that Flask is lacking in functionality.
+In this this post we'll create a simple website using the [Flask](http://flask.pocoo.org/) web microframework. The “micro” in microframework means Flask aims to keep its core simple but extensible. That said, this simplicity does it mean that Flask is lacking in functionality, as we'll see over the next couple of posts.
 
 <a href="http://flask.pocoo.org/" target="_blank">
     <img class="center-image" width="45%" src="/static/img/flask_logo.png" />
 </a>
 
-We'll use [this GitHub repository](https://github.com/matt-cart/minimal-website-demo) for demo purposes. You're welcome to clone it and start from there or try to replicate it from scratch.
+We'll use [this GitHub repository](https://github.com/matt-cart/minimal-website-demo) for demo purposes. You're welcome to clone it and follow along or try to replicate it from scratch.
 
 * * *
 
-## What is a website?
+<div class="bluebox">
+
+## What is a website? <button type="button" class="btn btn-xs btn-default btn-bluebox" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Here I'm shamelessly ripping off Tim Urban at Wait But Why to use a Blue Box to demarcate a sidebar discussion.">1</button>
+<script>$("[data-toggle=popover]").popover();</script>
+
 
 ### A disclaimer
 
-The ease with which we can easily and reliably interact with the World Wide Web belies the sophistication of the technological apparatus that enables such interactions[^1]. When I first started learning the ropes of web development, I found the internet to be aptly described by [Clarke's Third Law](https://en.wikipedia.org/wiki/Clarke%27s_three_laws). Before starting the tutorial, I've tried to provide some useful background on the internet below. I wrote this background with naïve me in mind.
+The ease with which we can reliably interact with the World Wide Web belies the sophistication of the technological apparatus that enables such interactions[^1]. When I first started learning the ropes of web development, I found the internet to be aptly described by [Clarke's Third Law](https://en.wikipedia.org/wiki/Clarke%27s_three_laws). Before diving into the tutorial I've tried to provide some useful background on the internet below. I wrote this background with naïve me in mind.
 
-With that being said, this background often includes heavily acronymical jargon and is by no means required reading for actually creating a functional website. If you wish, simply proceed to the "Assumptions and Prerequisites" section.
+With that being said, this background necessarily leans on heavily acronymical jargon and is by no means required reading for actually creating a functional website. If you wish, simply proceed to the "Assumptions and Prerequisites" section.
 
 ### Now for the jargon
 
-Every functional website can be referenced by a uniform resource locator (URL). This URL serves as an address that specifies the location of the website within the broader network of the Internet. Importantly, the URL is not an inherently useful address, it is merely one that can be remembered by humans. A domain name system (DNS) server is responsible for storing the translation of URLs into a numerical internet protocol (IP) address which is then used to locate the physical computer system that stores the content you wish to access by using a specific URL. An actual URL, familiarly, looks something like this:
+Every functional public website can be referenced by a uniform resource locator (URL). This URL acts as a means for specifying the location of the website within the broader network of the Internet. Importantly, the URL is not an immediately useful address, it is merely one that can be remembered by humans. A domain name system (DNS) server is responsible for storing the translation of URLs into a numerical internet protocol (IP) addresses. An IP address is then used to locate the physical computer system that stores the content you wish to access by using a specific URL.
+
+A URL, familiarly, looks something like this:
 
 ```
 http://google.com/maps
@@ -48,17 +54,17 @@ scheme://[authority]/[path]
 The components are as follows:
 * `scheme`: describes the protocol to be used to access the URL. Frequently, the scheme is `http` (*h*yper*t*ext *t*ransfer *p*rotocol), `https` (*h*yper*t*ext *t*ransfer *p*rotocol over transport layer *s*ecurity) or `ftp` (*f*ile *t*ransfer *p*rotocol).
 * `authority`: most frequently used to describe the "host", which is ultimately translated to an IP address by the aforementioned DNS server. In our case, the authority is `google.com`.
-* `path`: the path resembles a file system path. In some cases, the path component in a URL may actually map to a file system path on the server being accessed by a URL. Either way, this path is handled by the web server to determine what content should be served back to the user. When we go to <http://google.com/maps>, the `maps` path specifies to Google's servers that I want to see the Google Maps application.
+* `path`: the path resembles a file system path. In some cases, the path component in a URL may actually map to a file system path on the server being accessed by a URL. Regardless, this path is handled by the web server to determine what content should be served back to the user. When we go to <http://google.com/maps>, the `maps` path specifies to Google's servers that I want to see the Google Maps application.
 
-Any time you interaction you have with a web browser can be thought of as "client-side". Certain interactions, such as you hitting "enter" after typing "http://google.com/maps" into your address bar, can trigger events on the "server-side". For websites like this one, when someone enters the URL "http://mattcarter.co/blog" (client side), a request is sent to the server that "hosts" my web application (server side). The web server I am using (Apache, as we'll cover in Part 3), routes this request (and all others from the web) to my web application. The request says "someone is trying to access the web page for the `/blog` path". The application I have created uses a web framework (Flask, as we'll cover below) that is capable of processing this incoming request in some meaningful way and then serving something back to the user via the web server. "Processing the request in some meaningful way" can be many things -- we'll get into a few of these things. Regardless, there exists some mapping of URL paths to actions that my web application will take. 
+Any interaction you have with a web browser can be thought of as occuring on the "client-side". Certain interactions, such as you hitting "enter" after typing "http://google.com/maps" into your address bar, can trigger events on the "server-side". For websites like this one, when someone enters the URL "http://mattcarter.co/blog" (client side), a request is sent to the server that hosts my web application (server side). The web server I am using (Apache, as we'll cover in [Part 4](</blog/how-i-built-this-website-(part-4)>), routes this request (and all others from the web) to my web application. The request says "someone is trying to access the web page for the `/blog` path". The application I have created uses a web framework (Flask, as we'll cover below) that is capable of processing this incoming request in some meaningful way and then serving something back to the user via the web server. "Processing the request in some meaningful way" can be many things -- we'll get into a few of these things. Regardless, there exists some mapping of URL paths to web application functions. 
 
-The above explanation is not complete or exact. Someone who works on the technology driving the internet might even go so far as to call this explanation "wrong". If anything, I have glossed over nuance for the sake of providing a useful mental model. As I said, such an explanation would have been useful to me when I was first developing websites. This tutorial will cover the construction of the client-side web pages that a user interacts with and also the construction of the server-side application that the user (intentionally) never sees. Understanding the gulf that exists between client-side and server-side, that is, the inner workings of domain name systems, transfer protocols and internet networks is simply not required to make a website like the one we are making in this tutorial.
+The above explanation is not complete or exact. Someone who works on the technologies driving the internet might even go so far as to call this explanation "wrong". If anything, I have glossed over nuance for the sake of providing a useful mental model. As I said, this explanation would have been useful to me when I was first developing websites. This tutorial will cover the construction of the client-side web pages that a user interacts with and also the construction of the server-side application that the user (intentionally) never sees. Understanding the gulf that exists between client-side and server-side, that is, the inner workings of domain name systems, transfer protocols and internet networks is simply not required to make a website like the one we are making in this tutorial.
 
-As a final disclaimer, I should say that his website is intentionally constructed in a very simple fashion. It is simple for the sake of straightforward pedagogy, but also for the sake of maintenance. This website exists near one end of the complexity spectrum -- something like the Google Search Engine exists at the other.
-
+As a final disclaimer, I should say that his website is intentionally constructed in a very simple fashion. It is simple for the sake of straightforward pedagogy, but also for the sake of straightforward maintenance. This website exists near one end of the complexity spectrum -- something like the Google Search Engine exists at the other.
+</div>
 * * *
 
-Let's dive in to the tutorial. This post in the series will result in us creating a website operating on a so called "development server". That is, this website will be functional but won't be visible to the outside world. In Part 4 we will make our final product visible to the entire Internet.
+Let's dive in to the tutorial. This post in the series will result in us creating a website operating on a so called "development server". That is, this website will be functional but won't be visible to the outside world. In [Part 4](</blog/how-i-built-this-website-(part-4)>) we will make our final product visible to the entire Internet.
 
 ## Assumptions and Prerequisites
 
@@ -78,12 +84,12 @@ Before starting, make sure you have the following software management tools inst
 [Flask](http://flask.pocoo.org/) is a microframework for Python. Flask is lightweight and highly configurable. One does not need to sift through heaps of boilerplate code in order to get a project up and running. To illustrate how quick Flask is, create a new directory, install Flask using pip and create a file called `run.py`:
 
 ```console
-matt@matt$ mkdir new_project
-matt@matt$ cd new_project
-matt@matt$ virtualenv venv
-matt@matt$ . venv/bin/activate
-matt@matt$ pip install flask
-matt@matt$ touch run.py
+$ mkdir new_project
+$ cd new_project
+$ virtualenv venv
+$ . venv/bin/activate
+$ pip install flask
+$ touch run.py
 ```
 
 Now add the following code to `run.py`:
@@ -102,12 +108,12 @@ app.run('0.0.0.0')
 Back in Terminal, enter the following command:
 
 ```console
-matt@matt$ python run.py
+$ python run.py
 ```
 
-After entering this command, Flask creates a "development" web server that is built into the module. This development server allows you to access a version of your website that is only available locally. This is specified by the IP address `0.0.0.0`, which equates to "the IP address of this machine". Even more specifically, this development server must be accessed by a specific "port". A port is a specific endpoint for communication with the development server. All web servers use specific ports for communication, but this is frequently masked from the user by the web server.
+After entering this command, Flask creates a "development" web server that is built into the module. This development server allows you to access a version of your website that is only available locally. This is specified by the IP address `0.0.0.0`, which equates to "the IP address of this machine". Even more specifically, this development server must be accessed by a specific "port". A port is a specific endpoint for communication with the development server. All web servers use specific ports for communication, but this is frequently masked from the user.
 
-For the purposes of our development server, though, we can access this local IP address and port by entering the following shorthand into a web browser of your choosing: `localhost:5000`. *Et viola*, you will see your "Hello World!". The important thing to note is that this URL has an implicit "path" (see background above). The path in this case is the "`/`" route. Flask uses "routes" to decorate functions. The URL that is accessed determines which Python function in your project gets called, and ultimately what gets served back to the user.
+For the purposes of our development server, though, we can access this local IP address and port by entering the following shorthand into a web browser of your choosing: `localhost:5000`. *Et viola*, you will see your "Hello World!". The important thing to note is that this URL has an implicit "path" (see background above). The path in this case is the "`/`" route[^3]. Flask uses "routes" to decorate functions. The set of routes in your Flask application determine the mappings between the URL paths accessed and the Python functions that are educted.
 
 The [Flask Quickstart Guide](http://flask.pocoo.org/docs/1.0/quickstart/) is an excellent resource for more information about the basics of Flask.
 
@@ -115,7 +121,7 @@ The [Flask Quickstart Guide](http://flask.pocoo.org/docs/1.0/quickstart/) is an 
 
 Next, clone my [minimal Flask repository](https://github.com/matt-cart/minimal-website-demo) into a new folder.
 
-In the previous example, the website was entirely contained within a single Python script. This is great, but it will struggle to capture some of the complexity and sophistication we hope to implement. The demonstration repository is structed as follows:
+In the previous example, the website was entirely contained within a single Python script. This is great, but it will struggle to capture some of the complexity and sophistication we hope to implement. This demo repository is structed as follows:
 
 ```
 ├── run.py
@@ -133,7 +139,7 @@ Let's go through each piece.
 
 #### The `run.py` file
 
-The `run.py` file is ultimately what gets executed in the console to run the development server that we used for our Hello World! example. In that first iteration, we included our main route (also called a "view") in the `run.py` file. As our projet gets more sophisticated, it gets cumbersome to have all of our views in the `run.py` file. These views are all moved to the `views.py` file. Our new `run.py` is quite simple:
+The `run.py` file is ultimately what gets executed in the console to run the development server that we used for our Hello World! example. In that first iteration, we included our main route in the `run.py` file. As our projet gets more sophisticated, it gets cumbersome to have all of our views in the `run.py` file. These routes (or "views") are all moved to the `views.py` file. Our new `run.py` is quite simple:
 
 ```python
 from website import app
@@ -145,25 +151,25 @@ This configuration will make more sense when we eventually configure our Apache 
 
 #### Virtual environment and `requirements.txt`
 
-Following convention, create a virtual environment named `venv` using the steps in the Hello World! example. Make sure you always activate the virtual environment when you start working on this project. 
+Following convention, create a virtual environment named `venv` using the steps in the *Hello World!* example. Make sure you always activate the virtual environment when you start working on this project. 
 
 To install the necessary Python modules for this demo, use the following command:
 
 ```console
-matt@matt$ pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 Every time a new module is added to our pip environment, we want to get in the habit of adding it to our `requirements.txt` file:
 
 ```console
-matt@matt$ pip freeze > requirements.txt
+$ pip freeze > requirements.txt
 ```
 
 This makes it easier for you to install your Python environment when moving to a production server.
 
 #### The `website` directory
 
-This directory contains all the content of our website as well as the routing that connect URL paths with the content we wish to deliver.
+This directory contains all of the content of our website as well as the routes that connect URL paths with the content we wish to deliver.
 
 #### The `static` directory
 
@@ -175,10 +181,10 @@ This directory contains the static files including CSS files, JavaScript, etc. F
 	└── node_modules/
 ```
 
-The `package.json` file and `node_modules` directory are automatically created when we install packages with Yarn. Here, I am using Bootstrap v3. To install this packages and automatically create the `node_modules` directory, run the following command while in the `static` directory:
+The `package.json` file and `node_modules` directory are automatically created when we install packages with Yarn. Here, I am using Bootstrap v3.3. To install this packages and automatically create the `node_modules` directory, run the following command while in the `static` directory:
 
 ```console
-matt@matt$ yarn install
+$ yarn install
 ```
 
 In [Part 3](</blog/how-i-built-this-website-(part-3)>), we'll discuss adding custom CSS and images to the `static` directory.
@@ -187,7 +193,7 @@ In [Part 3](</blog/how-i-built-this-website-(part-3)>), we'll discuss adding cus
 
 This directory contains all of the HTML files that will be served. Before we get to the blogging components of this website, let's start with two files: `home_page.html` and `layout.html`. A powerful component of Flask (via the [Jinja](http://jinja.pocoo.org/) package) is the ability to create "layouts" that get passed on to each additional web page. In my case, the `layout.html` file allows me to add a universal header and navbar to each page without having to manually add that information to each and every HTML file.
 
-Below is `layout.html`, which demonstrates how to load a CSS file from the `node_modules` directory and also how we allow the layout to be propagated to all future HTML files.
+Below is `layout.html`, which demonstrates how to load a CSS file from the `node_modules` directory using Jinja syntax and also how we allow the layout to be propagated to all future HTML files.
 
 ```html
 <!DOCTYPE html>
@@ -206,9 +212,9 @@ Below is `layout.html`, which demonstrates how to load a CSS file from the `node
 </html>
 ```
 
-Take note of the Jinja syntax here. The `url_for()` function inside the double curly brackets `{{ }}` is special Jinja syntax. Before the web page is served, the contents between the curly brackets is changed to the return value of the function. In this case, the return value of the function is the URL for Bootstrap CSS file. 
+The `url_for()` function inside the double curly brackets `{{ }}` is special Jinja syntax. Before the web page is served, the contents between the curly brackets is changed to the return value of the function. In this case, the return value of the function is the URL for Bootstrap CSS file. 
 
-The `{% block content %}{% endblock %}` snipped is ultimately replaced by the contents of individual HTML files being served.
+The other bit of Jinja syntax, `{% block content %}{% endblock %}`, creates a "block" called *content* that is ultimately replaced by the contents of individual HTML files being served.
 
 In `home_page.html` we find the following:
 
@@ -222,6 +228,8 @@ In `home_page.html` we find the following:
     </div>
 {% endblock %}
 ```
+
+Notice that in this snippet we define the block *content* so that it can be injected into the HTML from `layout.html`.
 
 #### The `__init__.py` file
 
@@ -279,7 +287,11 @@ A quick recap of Part 1. In this post we covered:
 Proceed to [Part 2](</blog/how-i-built-this-website-(part-2)>) for an introduction to Markdown.
 
 
+* * *
+
+### Footnotes
 
 [^1]: A fascinating documentary about the past, present and future of the internet can be found in Werner Herzog's recent documentary [Lo and Behold: Reveries of the Connected World](https://www.youtube.com/watch?v=lYVjUT4FiOc). Watch this documentary even if only to see Herzog tell Elon Musk that he volunteers to go to Mars.
 [^2]: <https://en.wikipedia.org/wiki/URL#Syntax>
+[^3]: In a browser, the root path "`/`" is implied when accessing a URL like *http://mattcarter.co*. In fact, if you type a forward slash, and only a forward slash, at the trailing end of a URL, it will get clipped off after you hit enter.
 

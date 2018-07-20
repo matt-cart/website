@@ -8,9 +8,9 @@ summary: In this post we will configure an Amazon Web Services EC2 instance to h
 This series is a step-by-step tutorial for making a website like the one you're currently browsing. It includes an introduction to the Flask web framework, an introduction to Markdown (the markup language used to write this post), and also an introduction to hosting and deploying websites using Amazon Web Services.
 
 Posts in this series:
-1. [Introduction to Flask](/blog/how-i-built-this-website-(part-1\))
-2. [Introduction to Markdown](/blog/how-i-built-this-website-(part-2\))
-3. [Configuring a Markdown blog](/blog/how-i-built-this-website-(part-4\))
+1. [Introduction to Flask](</blog/how-i-built-this-website-(part-1)>)
+2. [Introduction to Markdown](</blog/how-i-built-this-website-(part-2)>)
+3. [Configuring a Markdown blog](</blog/how-i-built-this-website-(part-3)>)
 4. Deploying to Amazon Web Services (you are here)
 
 
@@ -239,6 +239,8 @@ These changes should propagate through Amazon's backend rather quickly. Within a
 	</tbody>
 </table>
 
+talk about reserved instances
+
 
 ### Overview of AWS online resources
 
@@ -262,6 +264,10 @@ These changes should propagate through Amazon's backend rather quickly. Within a
 "[Build a Simple, Static, Markdown-Powered Blog with Flask](http://www.jamesharding.ca/posts/simple-static-markdown-blog-in-flask/)" by James Harding at [jamesharding.ca](http://www.jamesharding.ca/)
 
 "[The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)" by Miguel Grinberg at [blog.miguelgrinberg.com](https://blog.miguelgrinberg.com/index)
+
+* * *
+
+### Footnotes
 
 [^1]: Discuss free tier, first year, etc.
 [^2]: You could feasibly use any of these Linux distributions, I'm arbitrarily choosing Ubuntu. I haven't tested to see whether the rest of the tutorial applies if you choose a different distribution.
