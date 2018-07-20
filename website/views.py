@@ -149,7 +149,8 @@ def md_to_html(md_string):
     """
     Convert a Markdown string to HTML.
     """
-    markdown_formatter = mistune.Markdown(renderer=HighlightRenderer())
+    markdown_formatter = mistune.Markdown(
+        renderer=HighlightRenderer(parse_block_html=True))
     html = markdown_formatter(md_string)
     return html 
 
