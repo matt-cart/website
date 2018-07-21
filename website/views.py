@@ -6,7 +6,7 @@ import collections
 from pygments import highlight
 from pygments.formatters import html
 from pygments.lexers import get_lexer_by_name
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, make_response
 
 from website import app
 
@@ -65,6 +65,32 @@ def page_not_found(e):
 def internal_service_error(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """
+    Generate a sitemap.xml for search engines. Add home page, blog home page and
+    blog posts to list of pages in site map. Return an XML response.
+    """
+    pages = []
+    pages.append(['http://mattcarter.co/', '2018-07-21'])
+    pages.append(['http://mattcarter.co/blog', '2018-07-21'])
+
+    content_path = os.path.join(app.root_path, 'content')
+    for file in os.listdir(content_path):
+        if not file.endswith('.md'):
+            continue
+        full_path = os.path.join(content_path, file)
+        post_obj = parse_markdown_post(full_path)
+        url = 'http://mattcarter.co/blog/%s' % file.replace('.md', '')
+        last_mod = post_obj.date
+        pages.append([url, last_mod])
+
+    response= make_response(render_template("sitemap.xml", pages=pages))
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
 
 
 @app.route('/blog')
