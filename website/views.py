@@ -55,6 +55,18 @@ def index():
     return render_template('home_page.html')
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_service_error(e):
+    # note that we set the 404 status explicitly
+    return render_template('500.html'), 500
+
+
 @app.route('/blog')
 def blog_home():
     """
@@ -121,9 +133,12 @@ def blog_post(post_title):
     Render the page for a blog post. Find the post in the /content directory
     based on the incoming URL and parse the post metadata.
     """
-    md_path  = os.path.join(app.root_path, 'content', '%s.md' % post_title)
-    post = parse_markdown_post(md_path)
-    return render_template('blog_post.html', post=post)
+    try:
+        md_path  = os.path.join(app.root_path, 'content', '%s.md' % post_title)
+        post = parse_markdown_post(md_path)
+        return render_template('blog_post.html', post=post)
+    except IOError:
+        return render_template('404.html'), 404
 
 
 def parse_markdown_post(md_path):
@@ -152,5 +167,6 @@ def md_to_html(md_string):
     markdown_formatter = mistune.Markdown(
         renderer=HighlightRenderer(parse_block_html=True))
     html = markdown_formatter(md_string)
-    return html 
+    return html
+
 
