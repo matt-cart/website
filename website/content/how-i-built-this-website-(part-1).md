@@ -68,7 +68,7 @@ Let's dive in to the tutorial. This post in the series will result in us creatin
 
 ## Assumptions and Prerequisites
 
-This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS and the Unix command line. I am also assuming that you are using a Mac or Linux operating system.
+This tutorial assumes the reader has a basic understanding of Python (specifically version 2.7), HTML, CSS, Git/GitHub and the Unix command line. I am also assuming that you are using a Mac or Linux operating system.
 
 Before starting, make sure you have the following software management tools installed:
 - [pip](https://docs.python.org/2.7/installing/) - A Python package manager.
